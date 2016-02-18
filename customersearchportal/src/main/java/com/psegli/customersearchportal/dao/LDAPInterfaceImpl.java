@@ -5,9 +5,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+
 
 import com.psegli.customersearchportal.model.OUDExtUser;
 
@@ -16,7 +14,6 @@ import netscape.ldap.LDAPConnection;
 import netscape.ldap.LDAPEntry;
 import netscape.ldap.LDAPException;
 import netscape.ldap.LDAPModification;
-import netscape.ldap.LDAPModificationSet;
 import netscape.ldap.LDAPSearchResults;
 
 public class LDAPInterfaceImpl implements LDAPInterface {
@@ -33,7 +30,7 @@ public class LDAPInterfaceImpl implements LDAPInterface {
 		String uid = "";
 		String givenName = "";
 		String mail = "";
-		String postalCode = "";
+		
 		List<OUDExtUser> users = new ArrayList<OUDExtUser>();
 		
 		try {
