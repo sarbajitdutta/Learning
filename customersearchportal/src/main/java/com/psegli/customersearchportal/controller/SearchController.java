@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class SearchController {
 	
 	
+	//Added comments
+	
 
 
 	@RequestMapping(method=RequestMethod.GET,value="searchUser")
