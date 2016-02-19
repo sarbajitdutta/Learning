@@ -15,7 +15,7 @@ $(document).ready(function(){
                           url: ajaxurl,  
                           data: "query="+ uname,  
                           success: function(response){  
-                           console.log(response);
+                         //  console.log(response);
                                $resp = response;
                           //  console.log($scope[0].userId);
                           }  
@@ -36,24 +36,27 @@ $(document).ready(function(){
 
 <script>
 angular.module('myApp', []).controller('userCtrl', function($scope,$http) {
+$scope.users = null;
 
-
-$http.post('http://localhost:8080/customersearchportal/searchportal/search?query=jeff')
+ $http.post('http://localhost:8080/customersearchportal/searchportal/search?query=jeff')
          .success(function (data) {
             // $scope.list = data.GetAllCustomersResult;
-            console.log(data);
+            //console.log(data);
+            console.log(angular.toJson(data));
+            $scope.users=data;
          })
          .error(function (data, status, headers, config) {
              //  Do some error handling here
          });
-$scope.users =
-
+//$scope.users = $scope.data2;
+//console.log($scope.data2);
+/*
 [{"userId":"jeffreysills","givenName":"test","mail":"nmohamed@mythics.com","preMigrationFlag":false},
 {"userId":"jeffreysill1","givenName":"Jeffrey","mail":"jeffrey.sills@pseg.com","preMigrationFlag":true},
 {"userId":"jefftest","givenName":"Jeffrey","mail":"jeffrey.sills@pseg.com","preMigrationFlag":true},
 {"userId":"jeffsills","givenName":"Jeffrey","mail":"jeffrey.sills@pseg.com","preMigrationFlag":false},
 {"userId":"jeffsills3","givenName":"Jeffrey","mail":"jeffrey.sills@pseg.com","preMigrationFlag":false}]
-
+*/
 /*
 {id:1, fName:'Hege', lName:"Pege" },
 {id:2, fName:'Kim',  lName:"Pim" },
@@ -112,7 +115,7 @@ $scope.test = function() {
     <th>mail</th>
     <th> Migration Flag </th>
   </tr>
-  <tr ng-repeat="user in users">
+  <tr ng-repeat="user in users ">
     <td>
       <button class="w3-btn w3-ripple" ng-click="editUser(user.userId)">&#9998; Edit</button>
     </td>
