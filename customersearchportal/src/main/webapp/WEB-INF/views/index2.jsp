@@ -2,112 +2,73 @@
 <html>
 <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 <script>
-$(document).ready(function(){  
-                            	  var contextPath ="http://localhost:8080/customersearchportal"
-                  var uname = 'jeff';
-                  var ajaxurl = contextPath+"/searchportal/search";
-                  if(uname.length >= 3 && uname.length <= 10){  
-                       $.ajax({  
-                          type: "POST",  
-                          url: ajaxurl,  
-                          data: "query="+ uname,  
-                          success: function(response){  
-                         //  console.log(response);
-                               $resp = response;
-                          //  console.log($scope[0].userId);
-                          }  
-                      });   
-                  }  
-                  else{  
-                       if(uname.length <3){
-                       	
-                    	   $(".status").html("<font color=red>Username should be atleast <b>3</b> character long.</font>");
-                       }
-                       
-                  }  
-                    
-              });  
-          
-          
-</script>
-
-<script>
 angular.module('myApp', []).controller('userCtrl', function($scope,$http) {
-$scope.users = null;
 
- $http.post('http://localhost:8080/customersearchportal/searchportal/search?query=jeff')
-         .success(function (data) {
-            // $scope.list = data.GetAllCustomersResult;
-            //console.log(data);
-            console.log(angular.toJson(data));
-            $scope.users=data;
-         })
-         .error(function (data, status, headers, config) {
-             //  Do some error handling here
-         });
-//$scope.users = $scope.data2;
-//console.log($scope.data2);
-/*
-[{"userId":"jeffreysills","givenName":"test","mail":"nmohamed@mythics.com","preMigrationFlag":false},
-{"userId":"jeffreysill1","givenName":"Jeffrey","mail":"jeffrey.sills@pseg.com","preMigrationFlag":true},
-{"userId":"jefftest","givenName":"Jeffrey","mail":"jeffrey.sills@pseg.com","preMigrationFlag":true},
-{"userId":"jeffsills","givenName":"Jeffrey","mail":"jeffrey.sills@pseg.com","preMigrationFlag":false},
-{"userId":"jeffsills3","givenName":"Jeffrey","mail":"jeffrey.sills@pseg.com","preMigrationFlag":false}]
-*/
-/*
-{id:1, fName:'Hege', lName:"Pege" },
-{id:2, fName:'Kim',  lName:"Pim" },
-{id:3, fName:'Sal',  lName:"Smith" },
-{id:4, fName:'Jack', lName:"Jones" },
-{id:5, fName:'John', lName:"Doe" },
-{id:6, fName:'Peter',lName:"Pan" }
-]; */
+$scope.user = {};
 $scope.edit = true;
 $scope.error = false;
 $scope.incomplete = false; 
 $scope.hideform = true; 
+$scope.tabledata=true;
+
+$scope.searchUser=function(){
+console.log('clicked');
+$scope.users = null;
+ $http.post('http://localhost:8080/customersearchportal/searchportal/search?query='+$scope.user.username)
+         .success(function (data) {
+           console.log(angular.toJson(data));
+           $scope.tabledata = false;
+                       $scope.users=data;
+         })
+         .error(function (data, status, headers, config) {
+             //  Do some error handling here
+         });
+
+}
+
+
 $scope.editUser = function(id) {
-  $scope.hideform = false;
-  // (id == 'new') {
-    $scope.edit = true;
-    $scope.incomplete = true;
-    $scope.email = $scope.users[userId].email;
- //   } else {
-  //  $scope.edit = false;
-  //  $scope.email = $scope.users[userId].email;
-     
-  
+console.log(id);
+$scope.hideform=false;
+//$scope.editemail =$scope.users[]
+$scope.user.useridedit = $scope.users[id].userId;
+$scope.user.nameedit = $scope.users[id].givenName;
+$scope.user.emailedit=$scope.users[id].mail;
+console.log($scope.user.emailedit);
 };
 
-$scope.$watch('email',function() {$scope.test();});
+$scope.editUserSave = function(id,email) {
+console.log('inside edit'+id);
+console.log($scope.user.email);
+$http.post('http://localhost:8080/customersearchportal/searchportal/modifyEmail?userid='+$scope.user.useridedit+'&emailid='+$scope.user.emailedit)
+         .success(function (data) {
+          console.log(data);
+            
+         })
+         .error(function (data, status, headers, config) {
+             //  Do some error handling here
+         });
 
+} 
 
-$scope.test = function() {
-  if ($scope.passw1 !== $scope.passw2) {
-    $scope.error = true;
-    } else {
-    $scope.error = false;
-  }
-  $scope.incomplete = false;
-  if ($scope.edit && (!$scope.fName.length ||
-  !$scope.lName.length ||
-  !$scope.passw1.length || !$scope.passw2.length)) {
-     $scope.incomplete = true;
-  }
-}; 
 
 }); 
 </script>
 <body ng-app="myApp" ng-controller="userCtrl" >
 
+  <form ng-submit="searchUser()">
+    <input class="w3-input w3-border" type="text" ng-model="user.username" ng-disabled="!edit" placeholder="Search for user">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    
+</form>
+
 <div class="w3-container">
 
 <h3>Users</h3>
 
-<table class="w3-table w3-bordered w3-striped">
+<table class="w3-table w3-bordered w3-striped" ng-hide="tabledata">
   <tr>
     <th>Edit</th>
     <th>User ID</th>
@@ -117,7 +78,7 @@ $scope.test = function() {
   </tr>
   <tr ng-repeat="user in users ">
     <td>
-      <button class="w3-btn w3-ripple" ng-click="editUser(user.userId)">&#9998; Edit</button>
+      <button class="w3-btn w3-ripple" ng-click="editUser(user.id)">&#9998; Edit</button>
     </td>
     <td>{{ user.userId }}</td>
     <td>{{ user.givenName }} </td>
@@ -127,13 +88,21 @@ $scope.test = function() {
 </table>
 <br>
 
-<form ng-hide="hideform">
+
+
+<form ng-hide="hideform" ng-submit=editUserSave()>
   <h3 ng-hide="edit">Edit User:</h3>
-    <label>Email ID:</label>
-    <input class="w3-input w3-border" type="text" ng-model="email" ng-disabled="!edit" placeholder="New Email ID">
+   <label>User ID</label>
+    <input class="w3-input w3-border" type="text" ng-model="user.useridedit" ng-disabled="edit" placeholder="New Email ID">
+  <br>
+   <label>Given Name</label>
+    <input class="w3-input w3-border" type="text" ng-model="user.nameedit" ng-disabled="edit" placeholder="New Email ID">
+  <br>
+    <label>Email ID</label>
+    <input class="w3-input w3-border" type="text" ng-model="user.emailedit" ng-disabled="!edit" placeholder="New Email ID">
   <br>
    
-<button class="w3-btn w3-green w3-ripple" ng-disabled="error || incomplete">&#10004; Save Changes</button>
+<button type="submit" class="w3-btn w3-green w3-ripple" ng-disabled="error || incomplete">&#10004; Save Changes</button>
 </form>
 
 </div>
