@@ -3,59 +3,8 @@
 <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-<script>
-angular.module('myApp', []).controller('userCtrl', function($scope,$http) {
+<script src="http://localhost:8080/customersearchportal/resources/js/userManage.js"></script>
 
-$scope.user = {};
-$scope.edit = true;
-$scope.error = false;
-$scope.incomplete = false; 
-$scope.hideform = true; 
-$scope.tabledata=true;
-
-$scope.searchUser=function(){
-console.log('clicked');
-$scope.users = null;
- $http.post('http://localhost:8080/customersearchportal/searchportal/search?query='+$scope.user.username)
-         .success(function (data) {
-           console.log(angular.toJson(data));
-           $scope.tabledata = false;
-                       $scope.users=data;
-         })
-         .error(function (data, status, headers, config) {
-             //  Do some error handling here
-         });
-
-}
-
-
-$scope.editUser = function(id) {
-console.log(id);
-$scope.hideform=false;
-//$scope.editemail =$scope.users[]
-$scope.user.useridedit = $scope.users[id].userId;
-$scope.user.nameedit = $scope.users[id].givenName;
-$scope.user.emailedit=$scope.users[id].mail;
-console.log($scope.user.emailedit);
-};
-
-$scope.editUserSave = function(id,email) {
-console.log('inside edit'+id);
-console.log($scope.user.email);
-$http.post('http://localhost:8080/customersearchportal/searchportal/modifyEmail?userid='+$scope.user.useridedit+'&emailid='+$scope.user.emailedit)
-         .success(function (data) {
-          console.log(data);
-            
-         })
-         .error(function (data, status, headers, config) {
-             //  Do some error handling here
-         });
-
-} 
-
-
-}); 
-</script>
 <body ng-app="myApp" ng-controller="userCtrl" >
 
   <form ng-submit="searchUser()">
@@ -65,30 +14,41 @@ $http.post('http://localhost:8080/customersearchportal/searchportal/modifyEmail?
 </form>
 
 <div class="w3-container">
+<div class="tablecontents" ng-hide="tabledata" >
+<h3> Users</h3>
+<table class="w3-table w3-bordered w3-striped" ng-table="tables" >
 
-<h3>Users</h3>
-
-<table class="w3-table w3-bordered w3-striped" ng-hide="tabledata">
   <tr>
-    <th>Edit</th>
+  
     <th>User ID</th>
-    <th>givenName</th>
-    <th>mail</th>
+    <th>Given Name</th>
+    <th>E-mail</th>
     <th> Migration Flag </th>
+      <th>Edit</th>
+    <th> Delete </th>
+    <th> Change Migration Status </th>
   </tr>
   <tr ng-repeat="user in users ">
-    <td>
-      <button class="w3-btn w3-ripple" ng-click="editUser(user.id)">&#9998; Edit</button>
-    </td>
+    
     <td>{{ user.userId }}</td>
     <td>{{ user.givenName }} </td>
     <td>{{ user.mail}} </td>
-    <td> {{user.preMigrationFlag}} </td>
+    <td ng-model="user.preMigrationFlag" ng-switch="user.preMigrationFlag">
+    <p ng-switch-when="true">Pre Migration</p> <p ng-switch-when="false"> Post Migration </p> </td>
+    <td>
+      <button class="w3-btn w3-ripple" ng-click="editUser(user.id)">&#9998; Edit</button>
+    </td>
+     <td>
+      <button class="w3-btn w3-ripple" ng-click="removeRow(user.id)" > Delete</button>
+    </td>
+        <td ng-model="user.preMigrationFlag" ng-switch="user.preMigrationFlag">
+      <p ng-switch-when="false"> <button class="w3-btn w3-ripple" ng-click="changeFlag(user.id)" > Change</button> </p>
+    </td>
   </tr>
 </table>
 <br>
 
-
+</div>
 
 <form ng-hide="hideform" ng-submit=editUserSave()>
   <h3 ng-hide="edit">Edit User:</h3>

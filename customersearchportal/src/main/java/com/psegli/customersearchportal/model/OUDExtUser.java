@@ -2,7 +2,7 @@ package com.psegli.customersearchportal.model;
 
 public class OUDExtUser {
 
-	
+	private int id;
 	private String userId;
 	private String givenName;
 	private String mail;
@@ -12,6 +12,18 @@ public class OUDExtUser {
 	public OUDExtUser() {
 		
 	}
+	
+	
+	public int getId() {
+		return id;
+	}
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
 	public String getUserId() {
 		return userId;
 	}

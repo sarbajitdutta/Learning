@@ -27,6 +27,7 @@ public class LDAPInterfaceImpl implements LDAPInterface {
 	public  List<OUDExtUser> searchLDAPByUid(String userId) {
 	
 		LDAPConnection ld = null;
+		int id = 0;
 		String uid = "";
 		String givenName = "";
 		String mail = "";
@@ -100,8 +101,10 @@ public class LDAPInterfaceImpl implements LDAPInterface {
 				{
 					user.setPreMigrationFlag(false);
 				}
+				user.setId(id);
 				
 				users.add(user);
+				id++;
 			}
 			ld.disconnect();
 			

@@ -33,6 +33,13 @@ public class SearchController {
 		
 	}
 	
+	
+	@RequestMapping(method=RequestMethod.GET,value="index2")
+	public String indexPage(){
+		return "index2";
+		
+	}
+	
 	@RequestMapping(method=RequestMethod.GET,value="searchresults")
 	public String searchresultsPage(){
 		return "searchresults";
@@ -67,34 +74,50 @@ public class SearchController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="delete")
 	@ResponseBody
-	public String deleteUser(@RequestParam(value="userid") String userId) {
+	public boolean deleteUser(@RequestParam(value="userid") String userId) {
 		System.out.println("In Delete");
 		LDAPInterface ldap = new LDAPInterfaceImpl();
-		boolean result = ldap.deleteEmailUsingUid(userId);
+		boolean result=true; //= ldap.deleteEmailUsingUid(userId);
 		
 		if(result) {
-			return "Successfully deleted user "+userId;
+			return true;
 			
 		}
 		else
-			return "User "+userId+" does not exist";
+			return false;
+		
+	}
+	
+	@RequestMapping(method=RequestMethod.POST,value="modifyEmail")
+	@ResponseBody
+	public boolean modifyEmailId(@RequestParam(value="userid") String userId, @RequestParam(value="emailid") String emailId) {
+		System.out.println("In Mofidy");
+		LDAPInterface ldap = new LDAPInterfaceImpl();
+		boolean result = ldap.modifyEmailUsingUid(userId, emailId);
+		
+		if(result) {
+			return true;
+			
+		}
+		else
+			return false;
 		
 	}
 	
 	@RequestMapping(method=RequestMethod.POST,value="preMigration")
 	@ResponseBody
-	public String toPreMigration(@RequestParam(value="userid") String userId) {
+	public boolean toPreMigration(@RequestParam(value="userid") String userId) {
 		System.out.println("In Premigration");
 		
 		LDAPInterface ldap = new LDAPInterfaceImpl();
 		boolean result = ldap.toPreMigration(userId);
 		
 		if(result) {
-			return "Successfully reverted user "+userId;
+			return true;
 			
 		}
 		else
-			return "User "+userId+" could not be reverted back";
+			return false;
 		
 		
 	}
