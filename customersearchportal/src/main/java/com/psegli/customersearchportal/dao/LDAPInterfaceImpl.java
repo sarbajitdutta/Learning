@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 
-
-
+import com.psegli.customersearchportal.config.ConfigurationParam;
 import com.psegli.customersearchportal.model.OUDExtUser;
 
 import netscape.ldap.LDAPAttribute;
@@ -18,6 +18,8 @@ import netscape.ldap.LDAPSearchResults;
 
 public class LDAPInterfaceImpl implements LDAPInterface {
 	
+	private static final Logger log = Logger.getLogger(LDAPInterfaceImpl.class);
+	
 	public LDAPInterfaceImpl() {
 		super();
 	}
@@ -25,6 +27,8 @@ public class LDAPInterfaceImpl implements LDAPInterface {
 	
 	
 	public  List<OUDExtUser> searchLDAPByUid(String userId) {
+		
+		log.debug("In searchLDAPByUid method of LDAPInterfaceImpl class");
 	
 		LDAPConnection ld = null;
 		int id = 0;
@@ -39,17 +43,22 @@ public class LDAPInterfaceImpl implements LDAPInterface {
 			ld = new LDAPConnection();
 			
 			/* Connect to the OUD Server */
-			ld.connect("gcolqaidm3.dev.psegliny", 1389);
-			ld.authenticate("cn=Directory Manager", "qat@dm1n");
+			log.debug("Connecting to Server "+ConfigurationParam.ldapServer);
+			ld.connect(ConfigurationParam.ldapServer, ConfigurationParam.ldapPort);
+			ld.authenticate(ConfigurationParam.ldapUser, ConfigurationParam.ldapPassword);
+			log.debug("Successfully connected to Server "+ConfigurationParam.ldapServer);
 			
 			/* Search for the user from the userid that was supplied */
 			String SEARCH_FILTER = "uid=" + userId+"*";
-			String SEARCH_BASE = "cn=users" + "," + "dc=dev,dc=psegliny";
+			String SEARCH_BASE = ConfigurationParam.ldapUserSearch + "," + ConfigurationParam.ldapRoot;
+			
+			log.debug("Searching for user " +userId);
 			LDAPSearchResults results = ld.search(SEARCH_BASE, LDAPConnection.SCOPE_SUB, SEARCH_FILTER, null, false);
 			
 			
 			
 			while(results.hasMoreElements()) {
+				
 				OUDExtUser user = new OUDExtUser();
 				LDAPEntry entry = (LDAPEntry)results.nextElement();
 				if(entry.getAttribute("uid")!=null){
@@ -111,17 +120,17 @@ public class LDAPInterfaceImpl implements LDAPInterface {
 			for (OUDExtUser oudExtUser : users) {
 				if(oudExtUser.getUserId().equals("0"))
 					System.out.println("skip");
-				System.out.println("UID "+oudExtUser.getUserId());
-				System.out.println("Given Name "+oudExtUser.getGivenName());
-				System.out.println("Mail "+oudExtUser.getMail());
-				System.out.println("Pre-Migration Flag "+oudExtUser.getPreMigrationFlag());
-				System.out.println("-------------------------------------");
+				log.debug("UID "+oudExtUser.getUserId());
+				log.debug("Given Name "+oudExtUser.getGivenName());
+				log.debug("Mail "+oudExtUser.getMail());
+				log.debug("Pre-Migration Flag "+oudExtUser.getPreMigrationFlag());
+				log.debug("-------------------------------------");
 			}
 			
 			
 		}
 		catch(LDAPException e) {
-			e.printStackTrace();
+			log.error("Error occured "+e);
 			users=null;
 			return users;
 			
@@ -134,25 +143,25 @@ public class LDAPInterfaceImpl implements LDAPInterface {
 		try {
 				LDAPConnection ld = new LDAPConnection();
 				/* Connect to the OUD Server */
-				ld.connect("gcolqaidm3.dev.psegliny", 1389);
+				log.debug("Connecting to Server "+ConfigurationParam.ldapServer);
+				ld.connect(ConfigurationParam.ldapServer, ConfigurationParam.ldapPort);
+				ld.authenticate(ConfigurationParam.ldapUser, ConfigurationParam.ldapPassword);
+				log.debug("Successfully connected to Server "+ConfigurationParam.ldapServer);
 				
 				
-				String myDN = "uid=" + userId + "," + "cn=users" + "," + "dc=dev,dc=psegliny";
+				String myDN = "uid=" + userId + "," + ConfigurationParam.ldapUserSearch + "," + ConfigurationParam.ldapRoot;
 				LDAPAttribute attrEmail = new LDAPAttribute("mail", email);
 				LDAPModification emailChange = new LDAPModification(LDAPModification.REPLACE, attrEmail);
-				
-				
-				ld.authenticate("cn=Directory Manager", "qat@dm1n");
 				
 				ld.modify(myDN, emailChange);
 				
 				ld.disconnect();
 				
-				System.out.println("Successfully modifed email for userID " +userId);
+				log.debug("Successfully modifed email for userID " +userId);
 				return true;
 			}
 		catch(LDAPException le) {
-			System.out.println("Error Changing password" +le);
+			log.error("Error occured "+le);
 			return false;
 		}
 			
@@ -166,18 +175,20 @@ public synchronized boolean deleteEmailUsingUid(String userId) {
 		try {
 				LDAPConnection ld = new LDAPConnection();
 				/* Connect to the OUD Server */
-				ld.connect("gcolqaidm3.dev.psegliny", 1389);
+				log.debug("Connecting to Server "+ConfigurationParam.ldapServer);
+				ld.connect(ConfigurationParam.ldapServer, ConfigurationParam.ldapPort);
+				ld.authenticate(ConfigurationParam.ldapUser, ConfigurationParam.ldapPassword);
+				log.debug("Successfully connected to Server "+ConfigurationParam.ldapServer);
 				
 				
-				String myDN = "uid=" + userId + "," + "cn=users" + "," + "dc=dev,dc=psegliny";
-				ld.authenticate("cn=Directory Manager", "qat@dm1n");
+				String myDN = "uid=" + userId + "," + ConfigurationParam.ldapUserSearch + "," + ConfigurationParam.ldapRoot;
 				
 				String SEARCH_FILTER = "uid=" + userId;
-				String SEARCH_BASE = "cn=users" + "," + "dc=dev,dc=psegliny";
+				String SEARCH_BASE = ConfigurationParam.ldapUserSearch + "," + ConfigurationParam.ldapRoot;
 				LDAPSearchResults results = ld.search(SEARCH_BASE, LDAPConnection.SCOPE_SUB, SEARCH_FILTER, null, false);
 				
 				if(!results.hasMoreElements()) {
-					System.out.println("The user "+userId+" does not exist");
+					log.debug("The user "+userId+" does not exist");
 					return false;
 				}
 				
@@ -186,12 +197,12 @@ public synchronized boolean deleteEmailUsingUid(String userId) {
 					ld.delete(myDN);
 					ld.disconnect();
 					
-					System.out.println("Successfully deleted user " +userId);
+					log.debug("Successfully deleted user " +userId);
 					return true;
 				}
 			}
 		catch(LDAPException le) {
-			System.out.println("Error deleting user" +le);
+			log.error("Error occured "+le);
 			return false;
 		}
 			
@@ -204,14 +215,17 @@ public synchronized boolean deleteEmailUsingUid(String userId) {
 		try {
 			LDAPConnection ld = new LDAPConnection();
 			/* Connect to the OUD Server */
-			ld.connect("gcolqaidm3.dev.psegliny", 1389);
+			log.debug("Connecting to Server "+ConfigurationParam.ldapServer);
+			ld.connect(ConfigurationParam.ldapServer, ConfigurationParam.ldapPort);
+			ld.authenticate(ConfigurationParam.ldapUser, ConfigurationParam.ldapPassword);
+			log.debug("Successfully connected to Server "+ConfigurationParam.ldapServer);
 			
 			
-			String myDN = "uid=" + userId + "," + "cn=users" + "," + "dc=dev,dc=psegliny";
-			ld.authenticate("cn=Directory Manager", "qat@dm1n");
+			String myDN = "uid=" + userId + "," + ConfigurationParam.ldapUserSearch + "," + ConfigurationParam.ldapRoot;
+			
 			
 			String SEARCH_FILTER = "uid=" + userId;
-			String SEARCH_BASE = "cn=users" + "," + "dc=dev,dc=psegliny";
+			String SEARCH_BASE = ConfigurationParam.ldapUserSearch + "," + ConfigurationParam.ldapRoot;
 			LDAPSearchResults results = ld.search(SEARCH_BASE, LDAPConnection.SCOPE_SUB, SEARCH_FILTER, null, false);
 			
 			
@@ -268,7 +282,7 @@ public synchronized boolean deleteEmailUsingUid(String userId) {
 			return true;
 		}
 		catch(LDAPException le) {
-			System.out.println("Error reverting to pre-migration state user" +le);
+			log.error("Error occured "+le);
 			return false;
 		}
 		
