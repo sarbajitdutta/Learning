@@ -134,4 +134,44 @@ public class SearchController {
 		
 	}
 	
+	@RequestMapping(method=RequestMethod.POST,value="login")
+	@ResponseBody
+	public boolean verifyCredentials(@RequestParam(value="userid") String userId, @RequestParam(value="password") String password, HttpServletRequest request) {
+		System.out.println("In login");
+		
+		if(userId.equalsIgnoreCase("adminsearch") && password.equals("Admin@U$3r"))
+		{
+			request.getSession().setAttribute("username", userId);
+			request.getSession().setAttribute("role", "admin");
+			request.getSession().setMaxInactiveInterval(3600);
+			
+			return true;
+		}
+		
+		else if(userId.equalsIgnoreCase("repsearch") && password.equals("R3pS3a@ch!"))
+		{
+			request.getSession().setAttribute("username", userId);
+			request.getSession().setAttribute("role", "representative");
+			request.getSession().setMaxInactiveInterval(3600);
+			
+			return true;
+		}
+		
+		else
+		{
+			return false;
+		}
+		
+	}
+	
+	@RequestMapping(method=RequestMethod.GET,value="logout")
+	public String logoutUser(HttpServletRequest request) {
+		request.getSession().removeAttribute("username");
+		request.getSession().removeAttribute("role");
+		request.getSession().invalidate();
+		
+		return "redirect:/login";
+		
+	}
+	
 }
