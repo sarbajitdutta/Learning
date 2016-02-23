@@ -137,13 +137,14 @@ public class SearchController {
 	@RequestMapping(method=RequestMethod.POST,value="login")
 	@ResponseBody
 	public boolean verifyCredentials(@RequestParam(value="userid") String userId, @RequestParam(value="password") String password, HttpServletRequest request) {
-		System.out.println("In login");
+		log.info("Logging with user "+userId);
 		
 		if(userId.equalsIgnoreCase("adminsearch") && password.equals("Admin@U$3r"))
 		{
 			request.getSession().setAttribute("username", userId);
 			request.getSession().setAttribute("role", "admin");
 			request.getSession().setMaxInactiveInterval(3600);
+			log.info("Successfully authenticated user "+userId+ " with admin role");
 			
 			return true;
 		}
@@ -153,12 +154,14 @@ public class SearchController {
 			request.getSession().setAttribute("username", userId);
 			request.getSession().setAttribute("role", "representative");
 			request.getSession().setMaxInactiveInterval(3600);
+			log.info("Successfully authenticated user "+userId+ " with representative role");
 			
 			return true;
 		}
 		
 		else
-		{
+		{	
+			log.info("Authentication failure for user "+userId);
 			return false;
 		}
 		
@@ -166,9 +169,11 @@ public class SearchController {
 	
 	@RequestMapping(method=RequestMethod.GET,value="logout")
 	public String logoutUser(HttpServletRequest request) {
+		String userId = (String)request.getSession().getAttribute("username");
 		request.getSession().removeAttribute("username");
 		request.getSession().removeAttribute("role");
 		request.getSession().invalidate();
+		log.info("Logged out user "+userId);
 		
 		return "redirect:/login";
 		
