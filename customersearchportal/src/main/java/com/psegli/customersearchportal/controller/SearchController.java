@@ -69,6 +69,35 @@ public class SearchController {
 		
 	}
 	
+	@RequestMapping(method=RequestMethod.GET,value="search/index")
+	public String searchindex(){
+		return "search/index";
+		
+	}
+	
+	@RequestMapping(method=RequestMethod.GET,value="search/")
+	public String searchdefault(){
+		return "search/index";
+		
+	}
+	
+	
+	@RequestMapping(method=RequestMethod.GET,value="search/login")
+	public String loginpage(){
+		return "search/login";
+		
+	}
+	
+	@RequestMapping(method=RequestMethod.GET,value="search/searchpage")
+	public String searchlogin(){
+		return "search/searchpage";
+		
+	}
+	
+	
+	
+	
+	
 	@RequestMapping(method=RequestMethod.POST,value="search",produces="application/json; charset=utf-8")
 	@ResponseBody
 	public String searchUser(@RequestParam(value="query") String query, HttpServletRequest request){

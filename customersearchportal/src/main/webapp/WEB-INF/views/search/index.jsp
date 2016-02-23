@@ -13,7 +13,7 @@
 
   <body ng-controller="indexCtrl">
   
-<p>   {{ message }} </p>
+    <div ng-include="template.url"></div>
    <!--   <div ng-include="template.url"></div> -->
   </body>
 
