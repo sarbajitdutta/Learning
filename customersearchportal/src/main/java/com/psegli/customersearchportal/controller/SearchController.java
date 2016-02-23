@@ -57,6 +57,18 @@ public class SearchController {
 		
 	}
 	
+	@RequestMapping(method=RequestMethod.GET,value="index")
+	public String index(){
+		return "index";
+		
+	}
+	
+	@RequestMapping(method=RequestMethod.GET,value="login")
+	public String login(){
+		return "login";
+		
+	}
+	
 	@RequestMapping(method=RequestMethod.POST,value="search",produces="application/json; charset=utf-8")
 	@ResponseBody
 	public String searchUser(@RequestParam(value="query") String query, HttpServletRequest request){
