@@ -10,7 +10,7 @@ $scope.tabledata=true;
 $scope.searchUser=function(){
 console.log('clicked');
 $scope.users = null;
- $http.post('http://localhost:8080/customersearchportal/searchportal/search?query='+$scope.user.username)
+ $http.post('http://localhost:8001/customersearchportal/searchportal/search?query='+$scope.user.username)
          .success(function (data) {
            console.log(angular.toJson(data));
            $scope.tabledata = false;
@@ -36,7 +36,7 @@ console.log($scope.user.emailedit);
 $scope.editUserSave = function(id,email) {
 console.log('inside edit'+id);
 console.log($scope.user.mail);
-$http.post('http://localhost:8080/customersearchportal/searchportal/modifyEmail?userid='+$scope.user.useridedit+'&emailid='+$scope.user.emailedit)
+$http.post('http://localhost:8001/customersearchportal/searchportal/modifyEmail?userid='+$scope.user.useridedit+'&emailid='+$scope.user.emailedit)
          .success(function (data) {
           console.log(data);
             
@@ -50,7 +50,7 @@ $http.post('http://localhost:8080/customersearchportal/searchportal/modifyEmail?
 $scope.removeRow = function(id) {
 console.log('inside delete'+id);
 //console.log($scope.users[id].userId);
-$http.post('http://localhost:8080/customersearchportal/searchportal/delete?userid='+$scope.users[id].userId)
+$http.post('http://localhost:8001/customersearchportal/searchportal/delete?userid='+$scope.users[id].userId)
          .success(function (data) {
           console.log(data);
           //$scope.tables.reload();
@@ -65,7 +65,7 @@ $http.post('http://localhost:8080/customersearchportal/searchportal/delete?useri
 $scope.changeFlag = function(id) {
 console.log('inside change'+id);
 //console.log($scope.users[id].userId);
-$http.post('http://localhost:8080/customersearchportal/searchportal/preMigration?userid='+$scope.users[id].userId)
+$http.post('http://localhost:8001/customersearchportal/searchportal/preMigration?userid='+$scope.users[id].userId)
          .success(function (data) {
           console.log(data);
           $scope.tables.reload();

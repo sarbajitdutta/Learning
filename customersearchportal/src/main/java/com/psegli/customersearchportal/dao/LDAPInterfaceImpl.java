@@ -130,7 +130,7 @@ public class LDAPInterfaceImpl implements LDAPInterface {
 			
 		}
 		catch(LDAPException e) {
-			log.error("Error occured "+e);
+			log.error("Error occured "+e.toString());
 			users=null;
 			return users;
 			
