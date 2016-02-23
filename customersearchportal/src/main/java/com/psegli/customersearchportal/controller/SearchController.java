@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,10 +27,13 @@ public class SearchController {
 	
 	//Added comments
 	
+	private static final Logger log = Logger.getLogger(SearchController.class);
+	
 
 
 	@RequestMapping(method=RequestMethod.GET,value="searchUser")
 	public String searchPage(){
+		log.info("In SearchUser method");
 		return "searchUser";
 		
 	}
@@ -55,12 +59,15 @@ public class SearchController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="search",produces="application/json; charset=utf-8")
 	@ResponseBody
-	public String searchUser(@RequestParam(value="query") String query){
-		System.out.println("In Search Method");
+	public String searchUser(@RequestParam(value="query") String query, HttpServletRequest request){
+		log.info(request.getRemoteAddr()+" Searching for user "+query);
         List<OUDExtUser> result = new ArrayList<OUDExtUser>();
 		LDAPInterface ldap = new LDAPInterfaceImpl();
 		result = ldap.searchLDAPByUid(query);
-		System.out.println(new Gson().toJson(result));
+		if(!result.isEmpty()){
+			log.info(request.getRemoteAddr()+" The search result for query string "+query+" contains "+result.size()+" results");
+		}
+		
 		String output = new Gson().toJson(result);
 		return output;
 		
@@ -91,17 +98,21 @@ public class SearchController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="modifyEmail")
 	@ResponseBody
-	public boolean modifyEmailId(@RequestParam(value="userid") String userId, @RequestParam(value="emailid") String emailId) {
-		System.out.println("In Mofidy");
+	public boolean modifyEmailId(@RequestParam(value="userid") String userId, @RequestParam(value="emailid") String emailId, HttpServletRequest request) {
+		log.info("To modify email of user - "+userId+" with new email - "+emailId);
 		LDAPInterface ldap = new LDAPInterfaceImpl();
 		boolean result = ldap.modifyEmailUsingUid(userId, emailId);
 		
 		if(result) {
+			log.info("Successfully modified email for user "+userId);
 			return true;
 			
+			
 		}
-		else
+		else {
+			log.info("There was some problem in modifying email for user "+userId);
 			return false;
+		}
 		
 	}
 	
@@ -126,13 +137,14 @@ public class SearchController {
 	@RequestMapping(method=RequestMethod.POST,value="login")
 	@ResponseBody
 	public boolean verifyCredentials(@RequestParam(value="userid") String userId, @RequestParam(value="password") String password, HttpServletRequest request) {
-		System.out.println("In login");
+		log.info("Logging with user "+userId);
 		
 		if(userId.equalsIgnoreCase("adminsearch") && password.equals("Admin@U$3r"))
 		{
 			request.getSession().setAttribute("username", userId);
 			request.getSession().setAttribute("role", "admin");
 			request.getSession().setMaxInactiveInterval(3600);
+			log.info("Successfully authenticated user "+userId+ " with admin role");
 			
 			return true;
 		}
@@ -142,12 +154,14 @@ public class SearchController {
 			request.getSession().setAttribute("username", userId);
 			request.getSession().setAttribute("role", "representative");
 			request.getSession().setMaxInactiveInterval(3600);
+			log.info("Successfully authenticated user "+userId+ " with representative role");
 			
 			return true;
 		}
 		
 		else
-		{
+		{	
+			log.info("Authentication failure for user "+userId);
 			return false;
 		}
 		
@@ -155,9 +169,11 @@ public class SearchController {
 	
 	@RequestMapping(method=RequestMethod.GET,value="logout")
 	public String logoutUser(HttpServletRequest request) {
+		String userId = (String)request.getSession().getAttribute("username");
 		request.getSession().removeAttribute("username");
 		request.getSession().removeAttribute("role");
 		request.getSession().invalidate();
+		log.info("Logged out user "+userId);
 		
 		return "redirect:/login";
 		
