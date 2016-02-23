@@ -1,7 +1,9 @@
 
+
+
 <!-- ng-app="searchusers" ng-controller="searchCtrl" > -->
-<div ng-controller=ng-controller="indexCtrl">
-  <form ng-submit="searchUser()">
+<div ng-app="searchusers" ng-controller="searchCtrl" style="width: 35%;margin-top: 20px;">
+  <form ng-submit="searchUser()" >
     <input class="w3-input w3-border" type="text" ng-model="user.username" ng-disabled="!edit" placeholder="Search for user">
         <button type="submit" class="btn btn-primary">Submit</button>
     

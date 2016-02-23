@@ -9,15 +9,26 @@ searchusers.config(function($routeProvider){
 	})
 	
 	.when ('/searchpage',{
-		templateUrl: 'searchpages',
+		templateUrl: 'searchpage',
 			controller: 'searchCtrl'
 	} )
 	
+	$routeProvider.otherwise({redirectTo: '/searchpage'});
+
+
 	
 });
 
+searchusers.run(function(authentication, $rootScope, $location) {
+	  $rootScope.$on('$routeChangeStart', function(evt) {
+	    if(authentication.isAuthenticated){ 
+	      $location.url("/searchpage");
+	    }
+	    event.preventDefault();
+	  });
+	})
 
-searchusers.controller('indexCtrl',function($scope,$http){
+searchusers.controller('indexCtrl',function($scope,$http,$location, authentication){
 		$scope.message = 'Welcome to homepage';
 		$scope.templates =
 		  [
@@ -30,6 +41,7 @@ searchusers.controller('indexCtrl',function($scope,$http){
 		        .success(function (data) {
 		         console.log(data);
 		         if ( data == true) {
+		        	 authentication.isAuthenticated = true;
 		   		$scope.template = $scope.templates[1];
 		   		} else {
 		   			$scope.template = $scope.templates[0];}
@@ -128,6 +140,13 @@ console.log('entered');
 	
 	
 })
+
+searchusers.factory('authentication', function() {
+  return {
+    isAuthenticated: false,
+    user: null
+  }
+});
 
 
 

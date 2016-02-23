@@ -48,15 +48,7 @@ a:hover + .box,.box:hover{
                 <a href="./"><img border="0" src="https://www.psegliny.com/appImages/PSEGLI/PSEGLI_Logo.jpg"></a>
             </div>
             <div class="rightHeaderSection">
-             	<div class="outageBtn" onClick="window.location.href='https://www.psegliny.com/page.cfm/CustomerService/ReportOutage';">
-					<img id="OutageIcon" src="https://www.psegliny.com/appImages/PSEGLI/Exclaim.png">
-                    <div>Report an Outage</div>
-                </div>
-            	<div class="contactTab" onClick="window.location.href='https://www.psegliny.com/page.cfm/Home/CustomerService/ContactUs';">
-                	<div><span id="contactUsBtn">Contact Us&nbsp;&nbsp;</span>(800) 490-0025</div>
-                </div>
-                <div class="HeaderSearchBox">
-                    <gcse:searchbox-only resultsUrl="pageAction.cfm/Search"></gcse:searchbox-only>            
+             	<p> Customer Management Portal </p>p>        
                 </div>
             </div>
 		</div>
