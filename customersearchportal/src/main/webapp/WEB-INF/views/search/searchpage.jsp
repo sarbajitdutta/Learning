@@ -15,7 +15,7 @@
 <div class="w3-row ">
 <hr>
 			<!-- Column one start -->
-			<div class="tablecontents w3-col l7" ng-hide="tabledata" style="border-left: thick solid #ff0000;overflow-y:scroll;height:100%;">
+			<div class="tablecontents w3-col l7" ng-hide="tabledata" style="padding-left: 10px;overflow-y:scroll;height: 620px;">
 <table class="w3-table w3-bordered w3-striped " ng-table="tables" >
 
   <tr>
