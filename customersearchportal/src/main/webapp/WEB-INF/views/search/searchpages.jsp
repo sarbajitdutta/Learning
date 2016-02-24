@@ -1,21 +1,57 @@
 
+	<style media="screen" type="text/css">
 
+body {
+	margin:0;
+	padding:0;
+}
 
+/* Start of Column CSS */
+#container2 {
+	clear:left;
+	float:left;
+	width:100%;
+	overflow:hidden;
+	background:#ffa7a7; /* column 2 background colour */
+}
+#container1 {
+	float:left;
+	width:100%;
+	position:relative;
+	right:50%;
+	background:#fff689; /* column 1 background colour */
+}
+#col1 {
+	float:left;
+	width:60%;
+	position:relative;
+	left:52%;
+	overflow:hidden;
+}
+#col2 {
+	float:left;
+	width:40%;
+	position:relative;
+	left:56%;
+	overflow:hidden;
+}
+
+    </style>
+</head>
+<body id="active2">
 <!-- ng-app="searchusers" ng-controller="searchCtrl" > -->
-<div ng-app="searchusers" ng-controller="searchCtrl" >
-<center>
+<div ng-app="searchusers" ng-controller="searchCtrl" style="width: 35%;margin-top: 20px;">
   <form ng-submit="searchUser()" >
-    <input style="width: 35%;margin-top: 20px;" class="w3-input w3-border" type="text" ng-model="user.username" ng-disabled="!edit" placeholder="Search for user">
+    <input class="w3-input w3-border" type="text" ng-model="user.username" ng-disabled="!edit" placeholder="Search for user">
         <button type="submit" class="btn btn-primary">Submit</button>
    
-</form>
-</center>
 
-<div id="w3-container" >
-<div class="w3-row ">
-<hr>
+<div id="container2">
+	<div id="container1">
+		<div id="col1">
 			<!-- Column one start -->
-			<div class="tablecontents w3-col l7" ng-hide="tabledata" style="border-left: thick solid #ff0000;overflow-y:scroll;height:100%;">
+			<div class="tablecontents col1" ng-hide="tabledata" >
+<h3> Users</h3>
 <table class="w3-table w3-bordered w3-striped " ng-table="tables" >
 
   <tr>
@@ -42,7 +78,7 @@
       <button class="w3-btn w3-ripple" ng-click="removeRow(user.id)" > Delete</button>
     </td>
         <td ng-model="user.preMigrationFlag" ng-switch="user.preMigrationFlag">
-      <p ng-switch-when="false"> <button class="w3-btn w3-ripple" ng-click="changeFlag(user.id)" ng-confirm-message> Change</button> </p>
+      <p ng-switch-when="false"> <button class="w3-btn w3-ripple" ng-click="changeFlag(user.id)" > Change</button> </p>
     </td>
   </tr>
 </table>
@@ -51,7 +87,11 @@
 
 </div>
 
-<div class="w3-col l4" style="padding-left: 30px;">
+			<!-- Column one end -->
+		</div>
+		<div id="col2">
+			<!-- Column two start -->
+			
 			<form ng-hide="hideform" ng-submit=editUserSave() >
   <h3 ng-hide="edit">Edit User:</h3>
    <label>User ID</label>
@@ -66,12 +106,11 @@
    
 <button type="submit" class="w3-btn w3-green w3-ripple" ng-disabled="error || incomplete">&#10004; Save Changes</button>
 </form>
-</div>
 			
 			<!-- Column two end -->
-	
+		</div>
+	</div>
 </div>
-</div>
-</div>
+
 
 </body>

@@ -78,7 +78,7 @@ a:hover + .box,.box:hover{
         <button type="submit" class="btn btn-primary">Submit</button>
     
 </form>
-
+</center>
 <div class="w3-container">
 <div class="tablecontents" ng-hide="tabledata" >
 <h3> Users</h3>
@@ -132,7 +132,7 @@ a:hover + .box,.box:hover{
 </form>
 
 </div>
-
+<center>
 <div class="FooterBottom" >
    	  <div style="text-align:left;margin-top:10px;">
         	<ul style="list-style:none;padding:0px; margin:0px;">

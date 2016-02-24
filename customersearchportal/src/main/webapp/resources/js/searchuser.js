@@ -19,7 +19,7 @@ searchusers.config(function($routeProvider){
 	
 });
 
-searchusers.run(function(authentication, $rootScope, $location) {
+/*searchusers.run(function(authentication, $rootScope, $location) {
 	  $rootScope.$on('$routeChangeStart', function(evt) {
 	    if(authentication.isAuthenticated){ 
 	      $location.url("/searchpage");
@@ -27,8 +27,8 @@ searchusers.run(function(authentication, $rootScope, $location) {
 	    event.preventDefault();
 	  });
 	})
-
-searchusers.controller('indexCtrl',function($scope,$http,$location, authentication){
+ */
+searchusers.controller('indexCtrl',function($scope,$http,$location){
 		$scope.message = 'Welcome to homepage';
 		$scope.templates =
 		  [
@@ -41,7 +41,7 @@ searchusers.controller('indexCtrl',function($scope,$http,$location, authenticati
 		        .success(function (data) {
 		         console.log(data);
 		         if ( data == true) {
-		        	 authentication.isAuthenticated = true;
+		        //	 authentication.isAuthenticated = true;
 		   		$scope.template = $scope.templates[1];
 		   		} else {
 		   			$scope.template = $scope.templates[0];}
@@ -63,13 +63,15 @@ console.log('entered');
 	$scope.incomplete = false; 
 	$scope.hideform = true; 
 	$scope.tabledata=true;
+	console.log($scope.tabledata);
+
 
 	$scope.searchUser=function(){
 	console.log('clicked');
 	$scope.users = null;
 	 $http.post('http://localhost:8001/customersearchportal/searchportal/search?query='+$scope.user.username)
 	         .success(function (data) {
-	        	 console.log('returned');
+	        	 console.log('returned data');
 
 	           console.log(angular.toJson(data));
 	           $scope.tabledata = false;
@@ -141,13 +143,27 @@ console.log('entered');
 	
 })
 
+/*
 searchusers.factory('authentication', function() {
   return {
     isAuthenticated: false,
     user: null
   }
 });
+*/
 
 
 
-
+app.directive('ngConfirmMessage', [function () {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            element.on('click', function (e) {
+                var message = attrs.ngConfirmMessage || "Are you sure ?";
+                if (!confirm(message)) {
+                    e.stopImmediatePropagation();
+                }
+            });
+        }
+    }
+}]);

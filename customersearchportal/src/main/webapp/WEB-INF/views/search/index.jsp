@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <title>PSEG LI User Management</title>
     
-    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+    <link rel="stylesheet" href="http://localhost:8001/customersearchportal/resources/css/w3.css">
   	<link rel="STYLESHEET" type="text/css" href="https://www.psegliny.com/style/style.css" media="all">
 			<link rel="STYLESHEET" type="text/css" href="https://www.psegliny.com/style/EOCWeather.css">
 			<link rel="STYLESHEET" type="text/css" href="https://www.psegliny.com/style/messages.css">
@@ -46,9 +46,10 @@
 		</div>
         
 	</div>
-	
+	</center>
     <div ng-include="template.url"></div>
    <!--   <div ng-include="template.url"></div> -->
+   
    <div class="FooterBottom" style="position:fixed; bottom:0px;" >
    	  <div style="text-align:left;margin-top:10px;">
         	<ul style="list-style:none;padding:0px; margin:0px;">
