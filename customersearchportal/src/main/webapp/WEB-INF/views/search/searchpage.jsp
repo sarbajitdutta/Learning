@@ -15,7 +15,7 @@
 <div class="w3-row ">
 <hr>
 			<!-- Column one start -->
-			<div class="tablecontents w3-col l7" ng-hide="tabledata" style="padding-left: 10px;overflow-y:scroll;height: 620px;">
+			<div class="tablecontents w3-col l8" ng-hide="tabledata" style="padding-left: 10px;overflow-y:scroll;height: 440px;">
 <table class="w3-table w3-bordered w3-striped " ng-table="tables" >
 
   <tr>
@@ -51,7 +51,7 @@
 
 </div>
 
-<div class="w3-col l4" style="padding-left: 30px;">
+<div class="w3-col l3" style="padding-left: 30px;">
 			<form ng-hide="hideform" ng-submit=editUserSave() >
   <h3 ng-hide="edit">Edit User:</h3>
    <label>User ID</label>

@@ -5,7 +5,11 @@ searchusers.config(function($routeProvider){
 	
 	.when('/index',{
 		templateUrl :'index',
-			controller: 'indexCtrl'
+			controller: 'indexCtrl',
+			access: {
+					//authen
+				
+			}
 	})
 	
 	.when ('/searchpage',{
@@ -19,29 +23,35 @@ searchusers.config(function($routeProvider){
 	
 });
 
-/*searchusers.run(function(authentication, $rootScope, $location) {
+searchusers.run(function(authentication, $rootScope, $location) {
 	  $rootScope.$on('$routeChangeStart', function(evt) {
 	    if(authentication.isAuthenticated){ 
-	      $location.url("/searchpage");
+	      $location.url("searchpage");
 	    }
 	    event.preventDefault();
 	  });
 	})
- */
-searchusers.controller('indexCtrl',function($scope,$http,$location){
+
+searchusers.controller('indexCtrl',function($scope,$http,$location, authentication){
+	console.log('auth is'+ authentication.isAuthenticated)
 		$scope.message = 'Welcome to homepage';
 		$scope.templates =
 		  [
 		  	{ url: 'login' },
 		  	{ url: 'searchpage' }
 		  ];
+		if (!authentication.isAuthenticated){
+			console.log('auth is1'+ authentication.isAuthenticated)
+
 		    $scope.template = $scope.templates[0];
 		  $scope.login = function (username, password) {
-		  $http.post('http://localhost:8001/customersearchportal/searchportal/login?userid='+username+'&password='+password)
+$http.post('http://localhost:8001/customersearchportal/searchportal/login?userid='+username+'&password='+password)
 		        .success(function (data) {
 		         console.log(data);
 		         if ( data == true) {
-		        //	 authentication.isAuthenticated = true;
+		        	 authentication.isAuthenticated = true;
+		 			console.log('auth done'+ authentication.isAuthenticated)
+
 		   		$scope.template = $scope.templates[1];
 		   		} else {
 		   			$scope.template = $scope.templates[0];}
@@ -51,7 +61,11 @@ searchusers.controller('indexCtrl',function($scope,$http,$location){
 		        	console.log('invalid login');
 		        });
 		  }; 
-			
+		} else {
+			console.log('auth is2'+ authentication.isAuthenticated)
+
+   			$scope.template = $scope.templates[1];}
+				
 });
 
 
@@ -143,18 +157,18 @@ console.log('entered');
 	
 })
 
-/*
+
 searchusers.factory('authentication', function() {
   return {
     isAuthenticated: false,
     user: null
   }
 });
-*/
 
 
 
-app.directive('ngConfirmMessage', [function () {
+
+searchusers.directive('ngConfirmMessage', [function () {
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {
