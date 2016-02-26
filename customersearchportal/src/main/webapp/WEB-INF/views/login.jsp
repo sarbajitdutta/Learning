@@ -1,6 +1,6 @@
 <h1>Login Page</h1>
 
-<form ng-submit="login(username, password)" class="ng-scope ng-pristine ng-valid">
+<form ng-show="loggedOut" ng-submit="login(username, password)" class="ng-scope ng-pristine ng-valid">
   <label>User name</label>
   <input type="text" ng-model="username" class="ng-pristine ng-valid">
   <label>Password</label>
@@ -9,5 +9,4 @@
   {{loginError}}  {{loggedUser}}
   <br/><br/>
   <button class="btn btn-success" ng-click="">Submit</button>
-  <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
 </form>

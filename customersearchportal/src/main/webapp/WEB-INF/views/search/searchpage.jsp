@@ -2,7 +2,7 @@
 
 
 <!-- ng-app="searchusers" ng-controller="searchCtrl" > -->
-<div ng-app="searchusers" ng-controller="searchCtrl" >
+<div ng-app="searchusers" ng-controller="indexCtrl"  >
 <center>
   <form ng-submit="searchUser()" >
     <input style="width: 35%;margin-top: 20px;" class="w3-input w3-border" type="text" ng-model="user.username" ng-disabled="!edit" placeholder="Search for user">

@@ -14,11 +14,13 @@
 			<link rel="stylesheet" href="https://myaccountqa.dev.psegliny/customermanagement/general/style/common.css" type="text/css">  
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-cookies.js"></script>
+
 <script src="http://localhost:8001/customersearchportal/resources/js/searchuser.js"></script>
 
   </head>
 
-  <body ng-controller="indexCtrl">
+  <body ng-controller="indexCtrl" >
 <center>
 	<div id="messageElm"></div>
 		<div class="header">
@@ -39,7 +41,7 @@
                 <a class="dropDownActivator" dropDownName="menu_1" href="#"  parent="0">Home&nbsp;</a></span>
             
             	<span class="LinkList">
-                <a class="dropDownActivator" dropDownName="menu_2" href="#" ng-click="userLogout()" parent="0">Logout&nbsp;</a></span>
+                <a class="dropDownActivator" dropDownName="menu_2" href="#" ng-show="loggedIn" ng-click="logOut()" parent="0">Logout&nbsp;</a></span>
             
             
             

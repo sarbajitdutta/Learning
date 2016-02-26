@@ -1,178 +1,169 @@
-var searchusers = angular.module('searchusers',['ngRoute']);
+var searchusers = angular.module('searchusers', ['ngRoute', 'ngCookies']);
 
-searchusers.config(function($routeProvider){
-	$routeProvider
-	
-	.when('/index',{
-		templateUrl :'index',
-			controller: 'indexCtrl',
-			access: {
-					//authen
-				
-			}
-	})
-	
-	.when ('/searchpage',{
-		templateUrl: 'searchpage',
-			controller: 'searchCtrl'
-	} )
-	
-	$routeProvider.otherwise({redirectTo: '/searchpage'});
+searchusers.config(['$routeProvider', function($routeProvider) {
+    $routeProvider
 
+        .when('/index', {
+        templateUrl: 'index',
+        controller: 'indexCtrl',
 
-	
-});
+    })
 
-searchusers.run(function(authentication, $rootScope, $location) {
-	  $rootScope.$on('$routeChangeStart', function(evt) {
-	    if(authentication.isAuthenticated){ 
-	      $location.url("searchpage");
-	    }
-	    event.preventDefault();
-	  });
-	})
+    .when('/searchpage', {
+        templateUrl: 'searchpage',
+        controller: 'searchCtrl'
+    })
 
-searchusers.controller('indexCtrl',function($scope,$http,$location, authentication){
-	console.log('auth is'+ authentication.isAuthenticated)
-		$scope.message = 'Welcome to homepage';
-		$scope.templates =
-		  [
-		  	{ url: 'login' },
-		  	{ url: 'searchpage' }
-		  ];
-		if (!authentication.isAuthenticated){
-			console.log('auth is1'+ authentication.isAuthenticated)
-
-		    $scope.template = $scope.templates[0];
-		  $scope.login = function (username, password) {
-$http.post('http://localhost:8001/customersearchportal/searchportal/login?userid='+username+'&password='+password)
-		        .success(function (data) {
-		         console.log(data);
-		         if ( data == true) {
-		        	 authentication.isAuthenticated = true;
-		 			console.log('auth done'+ authentication.isAuthenticated)
-
-		   		$scope.template = $scope.templates[1];
-		   		} else {
-		   			$scope.template = $scope.templates[0];}
-	        })
-		        .error(function (data, status, headers, config) {
-		            //  Do some error handling here
-		        	console.log('invalid login');
-		        });
-		  }; 
-		} else {
-			console.log('auth is2'+ authentication.isAuthenticated)
-
-   			$scope.template = $scope.templates[1];}
-				
-});
+    $routeProvider.otherwise({
+        redirectTo: '/searchpage'
+    });
 
 
-searchusers.controller('searchCtrl',function($scope,$http){
-console.log('entered');
-	$scope.user = {};
-	$scope.edit = true;
-	$scope.error = false;
-	$scope.incomplete = false; 
-	$scope.hideform = true; 
-	$scope.tabledata=true;
-	console.log($scope.tabledata);
+
+}]);
+
+searchusers.run(function($rootScope, $location, $cookies) {
+
+    $rootScope.$on('$routeChangeStart', $cookies, function(evt) {
+
+        if ($cookies.get('loggedIn')) {
+            $location.path("searchpage");
+        } else {
+            $location.path("searchpage");
+        }
+        event.preventDefault();
+    });
+})
+
+searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies) {
+    $scope.message = 'Welcome to homepage';
+    $scope.loggedIn='false';
+    $scope.templates = [{
+        url: 'login'
+    }, {
+        url: 'searchpage'
+    }];
+    if (!$cookies.get('loggedIn')) {
+        $scope.template = $scope.templates[0];
+        $scope.login = function(username, password) {
+            $http.post('http://localhost:8001/customersearchportal/searchportal/login?userid=' + username + '&password=' + password)
+                .success(function(data) {
+                    console.log(data);
+                    if (data == true) {
+                        $cookies.put('loggedIn', 'true');
+                        $scope.loggedIn = $cookies.get('loggedIn');
+                        console.log("logged in value is "+$scope.loggedIn);
+                        $scope.template = $scope.templates[1];
+                    } else {
+                        $scope.template = $scope.templates[1];
+                    }
+                })
+                .error(function(data, status, headers, config) {
+                    console.log('invalid login');
+                });
+        };
+    } else {
+
+        $scope.template = $scope.templates[1];
+    }
 
 
-	$scope.searchUser=function(){
-	console.log('clicked');
-	$scope.users = null;
-	 $http.post('http://localhost:8001/customersearchportal/searchportal/search?query='+$scope.user.username)
-	         .success(function (data) {
-	        	 console.log('returned data');
 
-	           console.log(angular.toJson(data));
-	           $scope.tabledata = false;
-	                       $scope.users=data;
-	         })
-	         .error(function (data, status, headers, config) {
-	             //  Do some error handling here
-	        	 console.log('errored');
-
-	         });
-
-	}
+    console.log('entered');
+    console.log($scope.loggedIn);
+    $scope.user = {};
+    $scope.edit = true;
+    $scope.error = false;
+    $scope.incomplete = false;
+    $scope.hideform = true;
+    $scope.tabledata = true;
+    console.log($scope.tabledata);
 
 
-	$scope.editUser = function(id) {
-	console.log(id);
-	$scope.hideform=false;
-	//$scope.editemail =$scope.users[]
-	$scope.user.useridedit = $scope.users[id].userId;
-	$scope.user.nameedit = $scope.users[id].givenName;
-	$scope.user.emailedit=$scope.users[id].mail;
-	console.log($scope.user.emailedit);
-	};
+    $scope.searchUser = function() {
+        console.log('clicked');
+        $scope.users = null;
+        $http.post('http://localhost:8001/customersearchportal/searchportal/search?query=' + $scope.user.username)
+            .success(function(data) {
+                console.log('returned data');
 
-	$scope.editUserSave = function(id,email) {
-	console.log('inside edit'+id);
-	console.log($scope.user.mail);
-	$http.post('http://localhost:8001/customersearchportal/searchportal/modifyEmail?userid='+$scope.user.useridedit+'&emailid='+$scope.user.emailedit)
-	         .success(function (data) {
-	          console.log(data);
-	            
-	         })
-	         .error(function (data, status, headers, config) {
-	             //  Do some error handling here
-	         });
+                console.log(angular.toJson(data));
+                $scope.tabledata = false;
+                $scope.users = data;
+            })
+            .error(function(data, status, headers, config) {
+                console.log('errored');
 
-	} 
+            });
 
-	$scope.removeRow = function(id) {
-	console.log('inside delete'+id);
-	//console.log($scope.users[id].userId);
-	$http.post('http://localhost:8001/customersearchportal/searchportal/delete?userid='+$scope.users[id].userId)
-	         .success(function (data) {
-	          console.log(data);
-	          //$scope.tables.reload();
-	            
-	         })
-	         .error(function (data, status, headers, config) {
-	             //  Do some error handling here
-	         });
+    }
 
-	} 
 
-	$scope.changeFlag = function(id) {
-	console.log('inside change'+id);
-	//console.log($scope.users[id].userId);
-	$http.post('http://localhost:8001/customersearchportal/searchportal/preMigration?userid='+$scope.users[id].userId)
-	         .success(function (data) {
-	          console.log(data);
-	          $scope.tables.reload();
-	            
-	         })
-	         .error(function (data, status, headers, config) {
-	             //  Do some error handling here
-	         });
+    $scope.editUser = function(id) {
+        console.log(id);
+        $scope.hideform = false;
+        $scope.user.useridedit = $scope.users[id].userId;
+        $scope.user.nameedit = $scope.users[id].givenName;
+        $scope.user.emailedit = $scope.users[id].mail;
+        console.log($scope.user.emailedit);
+    };
 
-	} 
-	
-	
+    $scope.logOut = function() {
+     $cookies.remove('loggedIn');
+     $scope.template = $scope.templates[0];
+
+    };
+    
+    
+    $scope.editUserSave = function(id, email) {
+        $http.post('http://localhost:8001/customersearchportal/searchportal/modifyEmail?userid=' + $scope.user.useridedit + '&emailid=' + $scope.user.emailedit)
+            .success(function(data) {
+                console.log(data);
+
+            })
+            .error(function(data, status, headers, config) {
+                //  Do some error handling here
+            });
+
+    }
+
+    $scope.removeRow = function(id) {
+        console.log('inside delete' + id);
+        $http.post('http://localhost:8001/customersearchportal/searchportal/delete?userid=' + $scope.users[id].userId)
+            .success(function(data) {
+                console.log(data);
+
+            })
+            .error(function(data, status, headers, config) {
+            });
+
+    }
+
+    $scope.changeFlag = function(id) {
+        console.log('inside change' + id);
+        $http.post('http://localhost:8001/customersearchportal/searchportal/preMigration?userid=' + $scope.users[id].userId)
+            .success(function(data) {
+                console.log(data);
+                $scope.tables.reload();
+
+            })
+            .error(function(data, status, headers, config) {
+            });
+
+    }
+
+
 })
 
 
-searchusers.factory('authentication', function() {
-  return {
-    isAuthenticated: false,
-    user: null
-  }
-});
 
 
 
-
-searchusers.directive('ngConfirmMessage', [function () {
+searchusers.directive('ngConfirmMessage', [function() {
     return {
         restrict: 'A',
-        link: function (scope, element, attrs) {
-            element.on('click', function (e) {
+        link: function(scope, element, attrs) {
+            element.on('click', function(e) {
                 var message = attrs.ngConfirmMessage || "Are you sure ?";
                 if (!confirm(message)) {
                     e.stopImmediatePropagation();
