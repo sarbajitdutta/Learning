@@ -35,7 +35,7 @@ searchusers.run(function($rootScope, $location, $cookies) {
     });
 })
 
-searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies) {
+searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies, $window) {
     $scope.message = 'Welcome to homepage';
     $scope.loggedIn='false';
     $scope.templates = [{
@@ -118,7 +118,8 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies)
     $scope.editUserSave = function(id, email) {
         $http.post('http://localhost:8001/customersearchportal/searchportal/modifyEmail?userid=' + $scope.user.useridedit + '&emailid=' + $scope.user.emailedit)
             .success(function(data) {
-                console.log(data);
+            	$window.alert('Changes have been saved');
+                console.log('Changes have been saved'+ data);
 
             })
             .error(function(data, status, headers, config) {
@@ -164,7 +165,7 @@ searchusers.directive('ngConfirmMessage', [function() {
         restrict: 'A',
         link: function(scope, element, attrs) {
             element.on('click', function(e) {
-                var message = attrs.ngConfirmMessage || "Are you sure ?";
+                var message = attrs.ngConfirmMessage || "Are you sure you want to save the changes ?";
                 if (!confirm(message)) {
                     e.stopImmediatePropagation();
                 }
