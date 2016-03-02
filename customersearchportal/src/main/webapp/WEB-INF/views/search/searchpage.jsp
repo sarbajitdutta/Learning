@@ -1,9 +1,8 @@
 <div ng-app="searchusers" ng-controller="indexCtrl"  >
 <center>
-<h3>Welcome <%=session.getAttribute("username") %></h3>
-  <form ng-submit="searchUser()" >
-    <input style="width: 35%;margin-top: 20px;" class="w3-input w3-border" type="text" ng-model="user.username" ng-disabled="!edit" placeholder="Search for user">
-        <button type="submit" class="btn btn-primary">Submit</button>
+  <form ng-submit="searchUser()" name="searchForm" >
+    <input style="width: 35%;margin-top: 20px;" class="w3-input w3-border" required="true" ng-minlength="4" type="text" ng-model="user.username" ng-disabled="!edit" placeholder="Search for user">
+        <button type="submit" class="w3-btn w3-green w3-ripple" ng-disabled="searchForm.$invalid">Submit</button>
    
 </form>
 </center>
@@ -25,7 +24,7 @@
     <%if(session.getAttribute("role").equals("admin")) { %><th> Delete </th><%}else {}%>
     <th> Change Migration Status </th>
   </tr>
-  <tr ng-repeat="user in users ">
+  <tr ng-repeat="user in users track by $index ">
     
     <td>{{ user.userId }}</td>
     <td>{{ user.givenName }} </td>
@@ -59,13 +58,13 @@
    <label>Given Name</label>
     <input class="w3-input w3-border" type="text" ng-model="user.nameedit" ng-disabled="edit" placeholder="Given Name">
   <br>
-    <label>Email ID</label>
-    <input type="email" required="true" class="w3-input w3-border"  ng-model="user.emailedit" ng-disabled="!edit" placeholder="New Email ID">
+    <label class>Email ID</label>
+    <input type="email" required="true" class="w3-input w3-border "   ng-model="user.emailedit" ng-disabled="!edit" placeholder="New Email ID">
   
    
   <br>
    
-<button type="submit" class="w3-btn w3-green w3-ripple" ng-disabled="incomplete" ng-click=editUserSave()  ng-confirm-message>&#10004; Save Changes</button>
+<button type="submit" class="w3-btn w3-green w3-ripple " ng-disabled="myForm.$invalid" ng-click=editUserSave()  ng-confirm-message>&#10004; Save Changes</button>
 </form>
 </div>
 			

@@ -38,6 +38,7 @@ searchusers.run(function($rootScope, $location, $cookies) {
 searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies, $window) {
     $scope.message = 'Welcome to homepage';
     $scope.loggedIn='false';
+    $scope.username=' username';
     $scope.templates = [{
         url: 'login'
     }, {
@@ -54,8 +55,12 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
                         $scope.loggedIn = $cookies.get('loggedIn');
                         console.log("logged in value is "+$scope.loggedIn);
                         $scope.template = $scope.templates[1];
+                        $scope.username=username;
+
                     } else {
-                        $scope.template = $scope.templates[1];
+                    	console.log('invalid login');
+                    	$window.alert("The username/password provided is incorrect.\n Please try again.")
+                        $scope.template = $scope.templates[0];
                     }
                 })
                 .error(function(data, status, headers, config) {
@@ -63,7 +68,7 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
                 });
         };
     } else {
-
+        $scope.loggedIn = $cookies.get('loggedIn');
         $scope.template = $scope.templates[1];
     }
 
@@ -136,8 +141,11 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
         $http.post('http://localhost:8001/customersearchportal/delete?userid=' + $scope.users[id].userId)
             .success(function(data) {
             	$window.alert('The User ID'+id+' has been deleted.');
+                console.log($scope.users);
 
-                console.log(data);
+        		$scope.users.splice( $scope.users[id], 1 );		
+
+                console.log($scope.users);
 
             })
             .error(function(data, status, headers, config) {

@@ -15,7 +15,6 @@
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-cookies.js"></script>
-
 <script src="http://localhost:8001/customersearchportal/resources/js/searchuser.js"></script>
 
   </head>
@@ -40,10 +39,12 @@
             	<span class="LinkList">
                 <a class="dropDownActivator" dropDownName="menu_1" href="#"  parent="0">Home&nbsp;</a></span>
             	
-            	<%if(session.getAttribute("role")!=null) { %>
-            	<span class="LinkList">
+            	
+            	<span class="LinkList" ng-switch="loggedIn">
+            	 <p ng-switch-when="true">
                 <a class="dropDownActivator" dropDownName="menu_2" href="#" ng-show="loggedIn" ng-click="logOut()" parent="0">Logout&nbsp;</a></span>
-            	<%}else {}%>
+            	</p>
+            	</span>
             
             
 		</div>

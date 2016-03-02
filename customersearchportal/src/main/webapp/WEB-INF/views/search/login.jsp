@@ -1,12 +1,12 @@
 <h1>Login Page</h1>
 <center>
-<form ng-submit="login(username, password)" class="ng-scope ng-pristine ng-valid">
+<form name="loginForm" ng-submit="login(username, password)" class="ng-scope ng-pristine ng-valid">
   <label>User name</label>
-  <input type="text" ng-model="username" class="ng-pristine ng-valid">
+  <input type="text" ng-model="username" required="true" class="ng-pristine ng-valid">
   <label>Password</label>
-  <input type="password" ng-model="password" class="ng-pristine ng-valid">
+  <input type="password" ng-model="password" required="true" class="ng-pristine ng-valid">
   <br/>
   {{loginError}}  {{loggedUser}}
   <br/><br/>
-  <button class="btn btn-success" ng-click="">Submit</button> 
+  <button class="w3-btn w3-green w3-ripple" ng-click="" ng-disabled="loginForm.$invalid">Submit</button> 
   </form></center>
