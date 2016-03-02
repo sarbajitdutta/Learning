@@ -35,9 +35,11 @@
     <%if(session.getAttribute("role").equals("admin")) { %><td>
       <button class="w3-btn w3-ripple" ng-click="editUser(user.id)"> &#9998; Edit </button> 
     </td><%}else {}%>
-     <%if(session.getAttribute("role").equals("admin")) { %><td>
-      <button class="w3-btn w3-ripple" ng-click="removeRow(user.id)" > Delete</button>
-    </td><%}else {}%>
+    <%if(session.getAttribute("role").equals("admin")) { %>
+     <td>
+      <button class="w3-btn w3-ripple" ng-click="removeRow(user.id)" ng-confirm-message > Delete</button>
+    </td>
+    <%}else {}%> 
         <td ng-model="user.preMigrationFlag" ng-switch="user.preMigrationFlag">
       <p ng-switch-when="false"> <button class="w3-btn w3-ripple" ng-click="changeFlag(user.id)" ng-confirm-message> Change</button> </p>
     </td>
@@ -49,19 +51,21 @@
 </div>
 
 <div class="w3-col l3" style="padding-left: 30px;">
-			<form ng-hide="hideform" >
+			<form ng-hide="hideform" name="myForm">
   <h3 ng-hide="edit">Edit User:</h3>
    <label>User ID</label>
-    <input class="w3-input w3-border" type="text" ng-model="user.useridedit" ng-disabled="edit" placeholder="New Email ID">
+    <input class="w3-input w3-border" type="text" ng-model="user.useridedit" ng-disabled="edit" placeholder="User ID">
   <br>
    <label>Given Name</label>
-    <input class="w3-input w3-border" type="text" ng-model="user.nameedit" ng-disabled="edit" placeholder="New Email ID">
+    <input class="w3-input w3-border" type="text" ng-model="user.nameedit" ng-disabled="edit" placeholder="Given Name">
   <br>
     <label>Email ID</label>
-    <input class="w3-input w3-border" type="text" ng-model="user.emailedit" ng-disabled="!edit" placeholder="New Email ID">
+    <input type="email" required="true" class="w3-input w3-border"  ng-model="user.emailedit" ng-disabled="!edit" placeholder="New Email ID">
+  
+   
   <br>
    
-<button type="submit" class="w3-btn w3-green w3-ripple" ng-disabled="error || incomplete" ng-click=editUserSave()  ng-confirm-message>&#10004; Save Changes</button>
+<button type="submit" class="w3-btn w3-green w3-ripple" ng-disabled="incomplete" ng-click=editUserSave()  ng-confirm-message>&#10004; Save Changes</button>
 </form>
 </div>
 			

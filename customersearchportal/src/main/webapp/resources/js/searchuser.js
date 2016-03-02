@@ -46,7 +46,7 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
     if (!$cookies.get('loggedIn')) {
         $scope.template = $scope.templates[0];
         $scope.login = function(username, password) {
-            $http.post('http://localhost:8001/customersearchportal/searchportal/login?userid=' + username + '&password=' + password)
+            $http.post('http://localhost:8001/customersearchportal/login?userid=' + username + '&password=' + password)
                 .success(function(data) {
                     console.log(data);
                     if (data == true) {
@@ -78,12 +78,14 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
     $scope.hideform = true;
     $scope.tabledata = true;
     console.log($scope.tabledata);
+    $scope.user.emailedit =' ';
+
 
 
     $scope.searchUser = function() {
         console.log('clicked');
         $scope.users = null;
-        $http.post('http://localhost:8001/customersearchportal/searchportal/search?query=' + $scope.user.username)
+        $http.post('http://localhost:8001/customersearchportal/search?query=' + $scope.user.username)
             .success(function(data) {
                 console.log('returned data');
 
@@ -116,7 +118,8 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
     
     
     $scope.editUserSave = function(id, email) {
-        $http.post('http://localhost:8001/customersearchportal/searchportal/modifyEmail?userid=' + $scope.user.useridedit + '&emailid=' + $scope.user.emailedit)
+    	
+        $http.post('http://localhost:8001/customersearchportal/modifyEmail?userid=' + $scope.user.useridedit + '&emailid=' + $scope.user.emailedit)
             .success(function(data) {
             	$window.alert('Changes have been saved');
                 console.log('Changes have been saved'+ data);
@@ -130,8 +133,10 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
 
     $scope.removeRow = function(id) {
         console.log('inside delete' + id);
-        $http.post('http://localhost:8001/customersearchportal/searchportal/delete?userid=' + $scope.users[id].userId)
+        $http.post('http://localhost:8001/customersearchportal/delete?userid=' + $scope.users[id].userId)
             .success(function(data) {
+            	$window.alert('The User ID'+id+' has been deleted.');
+
                 console.log(data);
 
             })
@@ -142,18 +147,22 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
 
     $scope.changeFlag = function(id) {
         console.log('inside change' + id);
-        $http.post('http://localhost:8001/customersearchportal/searchportal/preMigration?userid=' + $scope.users[id].userId)
+        $http.post('http://localhost:8001/customersearchportal/preMigration?userid=' + $scope.users[id].userId)
             .success(function(data) {
                 console.log(data);
+                
                 $scope.tables.reload();
+                
 
             })
             .error(function(data, status, headers, config) {
             });
 
     }
-
-
+    
+   
+    
+   
 })
 
 

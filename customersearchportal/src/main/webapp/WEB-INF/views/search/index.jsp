@@ -39,10 +39,11 @@
 			
             	<span class="LinkList">
                 <a class="dropDownActivator" dropDownName="menu_1" href="#"  parent="0">Home&nbsp;</a></span>
-            
+            	
+            	<%if(session.getAttribute("role")!=null) { %>
             	<span class="LinkList">
                 <a class="dropDownActivator" dropDownName="menu_2" href="#" ng-show="loggedIn" ng-click="logOut()" parent="0">Logout&nbsp;</a></span>
-            
+            	<%}else {}%>
             
             
 		</div>
