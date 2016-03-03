@@ -1,4 +1,3 @@
-<h1>Login Page</h1>
 <center>
 <form name="loginForm" ng-submit="login(username, password)" class="ng-scope ng-pristine ng-valid">
   <label>User name</label>
