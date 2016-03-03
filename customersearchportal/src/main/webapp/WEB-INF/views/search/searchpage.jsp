@@ -30,8 +30,8 @@
     <th>Given Name</th>
     <th>E-mail</th>
     <th> Migration Flag </th>
-      <%if(session.getAttribute("role").equals("admin")) { %><th>Edit</th><%}else {}%>
-    <%if(session.getAttribute("role").equals("admin")) { %><th> Delete </th><%}else {}%>
+      <%if(request.getSession().getAttribute("role").equals("admin")) { %><th>Edit</th><%}else {}%>
+    <%if(request.getSession().getAttribute("role").equals("admin")) { %><th> Delete </th><%}else {}%>
     <th> Change Migration Status </th>
   </tr>
   <tr ng-repeat="user in users track by $index ">
@@ -41,10 +41,10 @@
     <td>{{ user.mail}} </td>
     <td ng-model="user.preMigrationFlag" ng-switch="user.preMigrationFlag">
     <p ng-switch-when="true">Pre Migration</p> <p ng-switch-when="false"> Post Migration </p> </td>
-    <%if(session.getAttribute("role").equals("admin")) { %><td>
+    <%if(request.getSession().getAttribute("role").equals("admin")) { %><td>
       <button class="w3-btn w3-ripple" ng-click="editUser(user.id)"> &#9998; Edit </button> 
     </td><%}else {}%>
-    <%if(session.getAttribute("role").equals("admin")) { %>
+    <%if(request.getSession().getAttribute("role").equals("admin")) { %>
      <td>
       <button class="w3-btn w3-ripple" ng-click="removeRow(user.id)"  > Delete</button>
     </td>

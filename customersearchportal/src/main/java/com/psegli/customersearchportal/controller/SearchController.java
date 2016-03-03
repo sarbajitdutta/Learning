@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-//@RequestMapping("/searchportal/")
+
 public class SearchController {
 	
 	
@@ -32,44 +32,6 @@ public class SearchController {
 	private static final Logger log = Logger.getLogger(SearchController.class);
 	
 
-
-	@RequestMapping(method=RequestMethod.GET,value="searchUser")
-	public String searchPage(){
-		log.info("In SearchUser method");
-		return "searchUser";
-		
-	}
-	
-	
-	@RequestMapping(method=RequestMethod.GET,value="index2")
-	public String indexPage(){
-		return "index2";
-		
-	}
-	
-	@RequestMapping(method=RequestMethod.GET,value="searchresults")
-	public String searchresultsPage(){
-		return "searchresults";
-		
-	}
-	
-	@RequestMapping(method=RequestMethod.GET,value="home")
-	public String home(){
-		return "home";
-		
-	}
-	
-	@RequestMapping(method=RequestMethod.GET,value="index")
-	public String index(){
-		return "index";
-		
-	}
-	
-	@RequestMapping(method=RequestMethod.GET,value="login")
-	public String login(){
-		return "login";
-		
-	}
 	
 	@RequestMapping(method=RequestMethod.GET,value="search/index")
 	public String searchindex(){
@@ -117,25 +79,24 @@ public class SearchController {
 		
 	}
 	
-	@RequestMapping(method=RequestMethod.GET,value="deleteUser")
-	public String deleteUserPage(){
-		return "deleteUser";
-		
-	}
 	
 	@RequestMapping(method=RequestMethod.POST,value="delete")
 	@ResponseBody
-	public boolean deleteUser(@RequestParam(value="userid") String userId) {
-		System.out.println("In Delete");
+	public boolean deleteUser(@RequestParam(value="userid") String userId, HttpServletRequest request) {
 		LDAPInterface ldap = new LDAPInterfaceImpl();
-		boolean result=true; //= ldap.deleteEmailUsingUid(userId);
+		boolean result = ldap.deleteEmailUsingUid(userId);
+		
 		
 		if(result) {
+			log.info(request.getRemoteAddr()+" Deleted user "+userId);
 			return true;
 			
 		}
-		else
+		else{
+			log.info(request.getRemoteAddr()+" Could not delete user "+userId);
 			return false;
+			
+		}
 		
 	}
 	
@@ -161,18 +122,21 @@ public class SearchController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="preMigration")
 	@ResponseBody
-	public boolean toPreMigration(@RequestParam(value="userid") String userId) {
-		System.out.println("In Premigration");
+	public boolean toPreMigration(@RequestParam(value="userid") String userId, HttpServletRequest request) {
+		
 		
 		LDAPInterface ldap = new LDAPInterfaceImpl();
 		boolean result = ldap.toPreMigration(userId);
 		
 		if(result) {
+			log.info(request.getRemoteAddr()+" Reverted user "+userId+" to pre-migration state");
 			return true;
 			
 		}
-		else
+		else{
+			log.info(request.getRemoteAddr()+" Could not revert user "+userId+" to pre-migration state");
 			return false;
+		}
 		
 		
 	}
@@ -211,13 +175,14 @@ public class SearchController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST,value="logout")
-	public void logoutUser(HttpServletRequest request)  {
+	@ResponseBody
+	public boolean logoutUser(HttpServletRequest request)  {
 		String userId = (String)request.getSession().getAttribute("username");
 		request.getSession().removeAttribute("username");
 		request.getSession().removeAttribute("role");
 		request.getSession().invalidate();
 		log.info("Logged out user "+userId);
-		
+		return true;
 		
 		
 	}

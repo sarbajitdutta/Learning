@@ -5,23 +5,23 @@
     <meta charset="utf-8" />
     <title>PSEG LI User Management</title>
     
-    <link rel="stylesheet" href="http://localhost:8001/customersearchportal/resources/css/w3.css">
+    <link rel="stylesheet" href="http://gcolqaidm6:7003/customersearchportal/resources/css/w3.css">
   	<link rel="STYLESHEET" type="text/css" href="https://www.psegliny.com/style/style.css" media="all">
-			<link rel="STYLESHEET" type="text/css" href="https://www.psegliny.com/style/EOCWeather.css">
-			<link rel="STYLESHEET" type="text/css" href="https://www.psegliny.com/style/messages.css">
-			<link rel="STYLESHEET" type="text/css" href="https://www.psegliny.com/style/PSEGLI/style.css" /> 
-        	<link rel="stylesheet" href="https://www.psegliny.com/style/PSEGLI/CMSContent.css">		
-			<link rel="stylesheet" href="https://myaccountqa.dev.psegliny/customermanagement/general/style/common.css" type="text/css">  
-  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+	<link rel="STYLESHEET" type="text/css" href="https://www.psegliny.com/style/EOCWeather.css">
+	<link rel="STYLESHEET" type="text/css" href="https://www.psegliny.com/style/messages.css">
+	<link rel="STYLESHEET" type="text/css" href="https://www.psegliny.com/style/PSEGLI/style.css" /> 
+   	<link rel="stylesheet" href="https://www.psegliny.com/style/PSEGLI/CMSContent.css">		
+	<link rel="stylesheet" href="https://myaccountqa.dev.psegliny/customermanagement/general/style/common.css" type="text/css">  
+  	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
 
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-cookies.js"></script>
-<script src="http://localhost:8001/customersearchportal/resources/js/searchuser.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-cookies.js"></script>
+	<script src="http://gcolqaidm6:7003/customersearchportal/resources/js/searchuser.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
   
 
   </head>
@@ -46,12 +46,13 @@
             	<span class="LinkList">
                 <a class="dropDownActivator" dropDownName="menu_1" href="#"  parent="0">Home&nbsp;</a></span>
             	
-            	
+            	<%if(request.getSession()!=null) { %>
             	<span class="LinkList" ng-switch="loggedIn">
             	 <p ng-switch-when="true">
                 <a class="dropDownActivator" dropDownName="menu_2" href="#" ng-show="loggedIn" ng-click="logOut()" parent="0">Logout&nbsp;</a></span>
             	</p>
             	</span>
+            	<%}else {}%>
             
             
 		</div>
