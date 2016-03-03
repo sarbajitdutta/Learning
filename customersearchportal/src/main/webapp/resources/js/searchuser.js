@@ -46,7 +46,7 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
     if (!$cookies.get('loggedIn')) {
         $scope.template = $scope.templates[0];
         $scope.login = function(username, password) {
-            $http.post('http://gcolqaidm6:7003/customersearchportal/login?userid=' + username + '&password=' + password)
+            $http.post('http://localhost:8001/customersearchportal/login?userid=' + username + '&password=' + password)
                 .success(function(data) {
                     console.log(data);
                     if (data == true) {
@@ -92,7 +92,7 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
 
     $scope.searchUser = function() {
         $scope.users = null;
-        $http.post('http://gcolqaidm6:7003/customersearchportal/search?query=' + $scope.user.username)
+        $http.post('http://localhost:8001/customersearchportal/search?query=' + $scope.user.username)
             .success(function(data) {
                 if(data.length > 0  ) {
                	$scope.tablemsg = 1;
@@ -119,10 +119,12 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
 
     $scope.logOut = function() {
      $cookies.remove('loggedIn');
-     $http.post('http://gcolqaidm6:7003/customersearchportal/logout')
+     $http.post('http://localhost:8001/customersearchportal/logout')
      .success(function(data) {
          
          $scope.template = $scope.templates[0];
+         
+         $window.location.reload();
 
          
 
@@ -145,7 +147,7 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
     	
     	$mdDialog.show(confirm).then(function() {
     	      
-    		 $http.post('http://gcolqaidm6:7003/customersearchportal/modifyEmail?userid=' + $scope.user.useridedit + '&emailid=' + $scope.user.emailedit)
+    		 $http.post('http://localhost:8001/customersearchportal/modifyEmail?userid=' + $scope.user.useridedit + '&emailid=' + $scope.user.emailedit)
              .success(function(data) {
              
              	 $mdDialog.show(
@@ -184,7 +186,7 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
     	
     	  $mdDialog.show(confirm).then(function() {
     	    
-    		  $http.post('http://gcolqaidm6:7003/customersearchportal/delete?userid=' + $scope.users[id].userId)
+    		  $http.post('http://localhost:8001/customersearchportal/delete?userid=' + $scope.users[id].userId)
               .success(function(data) {
 
               	 $mdDialog.show(
@@ -206,7 +208,7 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
 
     $scope.changeFlag = function(id) {
         
-        $http.post('http://gcolqaidm6:7003/customersearchportal/preMigration?userid=' + $scope.users[id].userId)
+        $http.post('http://localhost:8001/customersearchportal/preMigration?userid=' + $scope.users[id].userId)
             .success(function(data) {
                 
                 

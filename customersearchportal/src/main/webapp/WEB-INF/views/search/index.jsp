@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <title>PSEG LI User Management</title>
     
-    <link rel="stylesheet" href="http://gcolqaidm6:7003/customersearchportal/resources/css/w3.css">
+    <link rel="stylesheet" href="http://localhost:8001/customersearchportal/resources/css/w3.css">
   	<link rel="STYLESHEET" type="text/css" href="https://www.psegliny.com/style/style.css" media="all">
 	<link rel="STYLESHEET" type="text/css" href="https://www.psegliny.com/style/EOCWeather.css">
 	<link rel="STYLESHEET" type="text/css" href="https://www.psegliny.com/style/messages.css">
@@ -17,7 +17,7 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-cookies.js"></script>
-	<script src="http://gcolqaidm6:7003/customersearchportal/resources/js/searchuser.js"></script>
+	<script src="http://localhost:8001/customersearchportal/resources/js/searchuser.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
