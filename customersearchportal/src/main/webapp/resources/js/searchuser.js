@@ -127,7 +127,17 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
 
     $scope.logOut = function() {
      $cookies.remove('loggedIn');
-     $scope.template = $scope.templates[0];
+     $http.post('http://localhost:8001/customersearchportal/logout')
+     .success(function(data) {
+         console.log(data);
+         
+         $scope.template = $scope.templates[0];
+
+         
+
+     })
+     .error(function(data, status, headers, config) {
+     });
 
     };
     
@@ -169,28 +179,39 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
 
     }
 
-    $scope.removeRow = function(id) {
-        console.log('inside delete' + id);
-        $http.post('http://localhost:8001/customersearchportal/delete?userid=' + $scope.users[id].userId)
-            .success(function(data) {
-//            	$window.alert('The User ID'+id+' has been deleted.');
-            	 $mdDialog.show(
-       			      $mdDialog.alert()
-       			        .parent(angular.element(document.querySelector('#popupContainer')))
-       			        .clickOutsideToClose(true)
-       			        .title('Customer Management Portal')
-       			        .textContent('The userid '+$scope.users[id].userId+' has been deleted!')
-       			        .ok('Got it!')
-       			    );
-                console.log($scope.users);
-        		$scope.users.splice( $scope.users[id], 1 );		
-                console.log($scope.users);
+    $scope.removeRow = function(id, ev) {
+    	
+    	
+    	var confirm = $mdDialog.confirm()
+		  .title('Customer Management Portal')
+		  .textContent('Do you want to delete the user?')
+        .ariaLabel('Lucky day')
+        .targetEvent(ev)
+	      .ok('Got it!')
+	      .cancel('Cancel');
+    	
+    	
+    	  $mdDialog.show(confirm).then(function() {
+    	    
+    		  $http.post('http://localhost:8001/customersearchportal/delete?userid=' + $scope.users[id].userId)
+              .success(function(data) {
 
-            })
-            .error(function(data, status, headers, config) {
-            });
-
-    }
+              	 $mdDialog.show(
+         			      $mdDialog.alert()
+         			        .parent(angular.element(document.querySelector('#popupContainer')))
+         			        .clickOutsideToClose(true)
+         			        .title('Customer Management Portal')
+         			        .textContent('The userid '+$scope.users[id].userId+' has been deleted!')
+         			        .ok('Got it!')
+         			    );
+                  
+              })
+              .error(function(data, status, headers, config) {
+              });
+    	    }, function() {
+    	    
+    	    });
+    	  }
 
     $scope.changeFlag = function(id) {
         console.log('inside change' + id);

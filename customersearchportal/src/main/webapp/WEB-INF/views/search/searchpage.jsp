@@ -46,7 +46,7 @@
     </td><%}else {}%>
     <%if(session.getAttribute("role").equals("admin")) { %>
      <td>
-      <button class="w3-btn w3-ripple" ng-click="removeRow(user.id)" ng-confirm-message > Delete</button>
+      <button class="w3-btn w3-ripple" ng-click="removeRow(user.id)"  > Delete</button>
     </td>
     <%}else {}%> 
         <td ng-model="user.preMigrationFlag" ng-switch="user.preMigrationFlag">

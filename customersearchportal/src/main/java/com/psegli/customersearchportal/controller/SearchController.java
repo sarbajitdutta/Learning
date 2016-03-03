@@ -5,11 +5,13 @@ import com.psegli.customersearchportal.dao.LDAPInterface;
 import com.psegli.customersearchportal.dao.LDAPInterfaceImpl;
 import com.psegli.customersearchportal.model.OUDExtUser;
 
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -208,15 +210,15 @@ public class SearchController {
 		
 	}
 	
-	@RequestMapping(method=RequestMethod.GET,value="logout")
-	public String logoutUser(HttpServletRequest request) {
+	@RequestMapping(method=RequestMethod.POST,value="logout")
+	public void logoutUser(HttpServletRequest request)  {
 		String userId = (String)request.getSession().getAttribute("username");
 		request.getSession().removeAttribute("username");
 		request.getSession().removeAttribute("role");
 		request.getSession().invalidate();
 		log.info("Logged out user "+userId);
 		
-		return "redirect:/login";
+		
 		
 	}
 	
