@@ -12,10 +12,17 @@
 			<link rel="STYLESHEET" type="text/css" href="https://www.psegliny.com/style/PSEGLI/style.css" /> 
         	<link rel="stylesheet" href="https://www.psegliny.com/style/PSEGLI/CMSContent.css">		
 			<link rel="stylesheet" href="https://myaccountqa.dev.psegliny/customermanagement/general/style/common.css" type="text/css">  
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-cookies.js"></script>
 <script src="http://localhost:8001/customersearchportal/resources/js/searchuser.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+  
 
   </head>
 

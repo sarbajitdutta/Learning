@@ -1,18 +1,28 @@
 <div ng-app="searchusers" ng-controller="indexCtrl"  >
 <center>
   <form ng-submit="searchUser()" name="searchForm" >
-    <input style="width: 35%;margin-top: 20px;" class="w3-input w3-border" required="true" ng-minlength="4" type="text" ng-model="user.username" ng-disabled="!edit" placeholder="Search for user">
-        <button type="submit" class="w3-btn w3-green w3-ripple" ng-disabled="searchForm.$invalid">Submit</button>
+    <input name="searchField" style="width: 35%;margin-top: 20px;" class="w3-input w3-border" required="true" ng-minlength="4" type="text" ng-model="user.username" ng-disabled="!edit" placeholder="Search for user">
+      </br>  <button type="submit" class="w3-btn w3-green w3-ripple" ng-disabled="searchForm.$invalid">Submit</button>
+   
+<!--      <pre>searchForm.searchField.$error = {{ searchForm.searchField.$error | json }}</pre> -->
+   
+  <div ng-messages="searchForm.searchField.$error" style="color:maroon" role="alert">
+    <div ng-message="minlength">Please enter atleast 4 characters to perform a search</div>
+  </div>
    
 </form>
 </center>
 
-<div id="w3-container" >
-<div class="w3-row ">
+<div id="w3-container" ng-switch="tablemsg">
+
+        <center ng-switch-when=0> </br></br>No users found for the search term <b>{{user.username}}</b>  !</center>
+
+<div class="w3-row"  ng-switch-when=1 >
 <hr>
+
 			<!-- Column one start -->
 			<div class="tablecontents w3-col l8" ng-hide="tabledata" style="padding-left: 10px;overflow-y:scroll;height: 440px;">
-<table class="w3-table w3-bordered w3-striped " ng-table="tables" >
+<table class="w3-table w3-bordered w3-striped " ng-table="tables"  >
 
   <tr>
   
@@ -64,7 +74,7 @@
    
   <br>
    
-<button type="submit" class="w3-btn w3-green w3-ripple " ng-disabled="myForm.$invalid" ng-click=editUserSave()  ng-confirm-message>&#10004; Save Changes</button>
+<md-button type="submit" class="w3-btn w3-green w3-ripple " ng-disabled="myForm.$invalid" ng-click=editUserSave($event)  >&#10004; Save Changes</md-button>
 </form>
 </div>
 			

@@ -1,4 +1,4 @@
-var searchusers = angular.module('searchusers', ['ngRoute', 'ngCookies']);
+var searchusers = angular.module('searchusers', ['ngRoute', 'ngCookies','ngMessages','ngMaterial']);
 
 searchusers.config(['$routeProvider', function($routeProvider) {
     $routeProvider
@@ -35,10 +35,10 @@ searchusers.run(function($rootScope, $location, $cookies) {
     });
 })
 
-searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies, $window) {
+searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies, $window,$mdDialog) {
     $scope.message = 'Welcome to homepage';
     $scope.loggedIn='false';
-    $scope.username=' username';
+   // $scope.username=' username';
     $scope.templates = [{
         url: 'login'
     }, {
@@ -59,7 +59,15 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
 
                     } else {
                     	console.log('invalid login');
-                    	$window.alert("The username/password provided is incorrect.\n Please try again.")
+                  //  	$window.alert("The username/password provided is incorrect.\n Please try again.")
+                    	   $mdDialog.show(
+                    			      $mdDialog.alert()
+                    			        .parent(angular.element(document.querySelector('#popupContainer')))
+                    			        .clickOutsideToClose(true)
+                    			        .title('Customer Management Portal')
+                    			        .textContent('The username/password combination is incorrect')
+                    			        .ok('Got it!')
+                    			    );
                         $scope.template = $scope.templates[0];
                     }
                 })
@@ -92,11 +100,13 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
         $scope.users = null;
         $http.post('http://localhost:8001/customersearchportal/search?query=' + $scope.user.username)
             .success(function(data) {
-                console.log('returned data');
-
-                console.log(angular.toJson(data));
+                if(data.length > 0  ) {
+               	$scope.tablemsg = 1;
                 $scope.tabledata = false;
                 $scope.users = data;
+                } else {
+                	$scope.tablemsg = 0;
+                }
             })
             .error(function(data, status, headers, config) {
                 console.log('errored');
@@ -122,17 +132,40 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
     };
     
     
-    $scope.editUserSave = function(id, email) {
+    $scope.editUserSave = function(id, email,ev) {
     	
-        $http.post('http://localhost:8001/customersearchportal/modifyEmail?userid=' + $scope.user.useridedit + '&emailid=' + $scope.user.emailedit)
-            .success(function(data) {
-            	$window.alert('Changes have been saved');
-                console.log('Changes have been saved'+ data);
+    	var confirm = $mdDialog.confirm()
+    			  .title('Customer Management Portal')
+    			  .textContent('Do you want to make the changes?')
+                  .ariaLabel('Lucky day')
+                  .targetEvent(ev)
+ 			      .ok('Got it!')
+ 			      .cancel('Cancel');
+    	
+    	$mdDialog.show(confirm).then(function() {
+    	      
+    		 $http.post('http://localhost:8001/customersearchportal/modifyEmail?userid=' + $scope.user.useridedit + '&emailid=' + $scope.user.emailedit)
+             .success(function(data) {
+             
+             	 $mdDialog.show(
+        			      $mdDialog.alert()
+        			        .parent(angular.element(document.querySelector('#popupContainer')))
+        			        .clickOutsideToClose(true)
+        			        .title('Customer Management Portal')
+        			        .textContent('Changes have been saved!')
+        			        .ok('Got it!')
+        			    );
+                 console.log('Changes have been saved'+ data);
 
-            })
-            .error(function(data, status, headers, config) {
-                //  Do some error handling here
-            });
+             })
+             .error(function(data, status, headers, config) {
+                 
+             });
+    	    }, function() {
+    	     
+    	    });
+    	
+       
 
     }
 
@@ -140,11 +173,17 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
         console.log('inside delete' + id);
         $http.post('http://localhost:8001/customersearchportal/delete?userid=' + $scope.users[id].userId)
             .success(function(data) {
-            	$window.alert('The User ID'+id+' has been deleted.');
+//            	$window.alert('The User ID'+id+' has been deleted.');
+            	 $mdDialog.show(
+       			      $mdDialog.alert()
+       			        .parent(angular.element(document.querySelector('#popupContainer')))
+       			        .clickOutsideToClose(true)
+       			        .title('Customer Management Portal')
+       			        .textContent('The userid '+$scope.users[id].userId+' has been deleted!')
+       			        .ok('Got it!')
+       			    );
                 console.log($scope.users);
-
         		$scope.users.splice( $scope.users[id], 1 );		
-
                 console.log($scope.users);
 
             })
@@ -177,14 +216,15 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
 
 
 
-searchusers.directive('ngConfirmMessage', [function() {
+searchusers.directive('ngConfirmMessage', ['$mdDialog',function($mdDialog) {
     return {
-        restrict: 'A',
+       // restrict: 'A',
         link: function(scope, element, attrs) {
             element.on('click', function(e) {
-                var message = attrs.ngConfirmMessage || "Are you sure you want to save the changes ?";
-                if (!confirm(message)) {
-                    e.stopImmediatePropagation();
+               var message = attrs.ngConfirmMessage || "Are you sure you want to save the changes ?";
+            	
+              if (!confirm(message)) {
+                  e.stopImmediatePropagation();
                 }
             });
         }
