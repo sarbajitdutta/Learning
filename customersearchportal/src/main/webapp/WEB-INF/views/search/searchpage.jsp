@@ -50,7 +50,7 @@
     </td>
     <%}else {}%> 
         <td ng-model="user.preMigrationFlag" ng-switch="user.preMigrationFlag">
-      <p ng-switch-when="false"> <button class="w3-btn w3-ripple" ng-click="changeFlag(user.id)" ng-confirm-message> Change</button> </p>
+      <p ng-switch-when="false"> <button class="w3-btn w3-ripple" ng-click="changeFlag(user.id)"> Change</button> </p>
     </td>
   </tr>
 </table>

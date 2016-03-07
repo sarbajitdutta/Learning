@@ -206,18 +206,39 @@ searchusers.controller('indexCtrl', function($scope, $http, $location, $cookies,
     	    });
     	  }
 
-    $scope.changeFlag = function(id) {
+    $scope.changeFlag = function(id, ev) {
+    	
+    	
+    	var confirm = $mdDialog.confirm()
+		  .title('Customer Management Portal')
+		  .textContent('Do you want to revert the user to pre-migration state?')
+      .ariaLabel('Lucky day')
+      .targetEvent(ev)
+	      .ok('Got it!')
+	      .cancel('Cancel');
         
+    	
+    	$mdDialog.show(confirm).then(function() {
         $http.post('http://localhost:8001/customersearchportal/preMigration?userid=' + $scope.users[id].userId)
             .success(function(data) {
                 
                 
-                $scope.tables.reload();
+            	$mdDialog.show(
+       			      $mdDialog.alert()
+       			        .parent(angular.element(document.querySelector('#popupContainer')))
+       			        .clickOutsideToClose(true)
+       			        .title('Customer Management Portal')
+       			        .textContent('The userid '+$scope.users[id].userId+' has been reverted to pre-migration state!')
+       			        .ok('Got it!')
+       			    );
                 
 
             })
             .error(function(data, status, headers, config) {
             });
+    	 }, function() {
+     	    
+ 	    });
 
     }
     
