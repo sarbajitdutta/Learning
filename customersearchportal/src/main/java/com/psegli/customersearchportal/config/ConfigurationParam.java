@@ -17,6 +17,7 @@ public class ConfigurationParam {
 	public static String ldapRoot;
 	public static String ldapUser;
 	public static String ldapUserSearch;
+	public static String emailNotification;
 	
 	
 	public void loadProperties() {
@@ -35,6 +36,7 @@ public class ConfigurationParam {
 			ldapRoot = properties.getProperty("ldap_root");
 			ldapUser = properties.getProperty("ldap_user");
 			ldapUserSearch = properties.getProperty("ldap_user_search");
+			emailNotification = properties.getProperty("email_notification");
 			
 			log.info("All the properties has been assigned.");
 			
